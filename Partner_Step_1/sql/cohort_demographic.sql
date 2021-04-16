@@ -31,5 +31,5 @@ FROM (
   ) AS enc_counts_loc
   LEFT JOIN @CENSUS_LOCATION cl ON cl.PERSON_ID = enc_counts_loc.patid 
   				AND loc_start = enc_counts_loc.latest_loc_date 
-  JOIN @DEMOGRAPHICS d ON d.PERSON_ID = enc_counts_loc.patid
+  JOIN @DEMOGRAPHIC d ON d.PERSON_ID = enc_counts_loc.patid
 ) a;

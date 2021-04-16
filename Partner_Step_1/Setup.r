@@ -1,7 +1,7 @@
 # Enter the server name and database name of your CODI VDW
 
-ServerName <- "localhost"
-DatabaseName <- "VDW_3_4_DH_1120"
+ServerName <- ""
+DatabaseName <- ""
 
 # PatenerID corresponds to the initials of your site and is one of the following:
 #  Children's Hospital of Colorado = ch
@@ -10,23 +10,27 @@ DatabaseName <- "VDW_3_4_DH_1120"
 #  hfc?
 #  Kaiser Permanente Colorado = kp
 
-PartnerID <- "dh"
+PartnerID <- ""
 
 # If you use a specific username and password to connect to your CODI VDW enter those below.
 # If you just use your windows credentials to connect, leave these blank.
+
 SQLServerUserName<- ""
 SQLServerPassword<- ""
 
 # Only enter a port number if your CODI VDW SQL Server operates on a different port than
 #  the standard one of 1433 (this is rare).
+
 PortNumber <- ""
 
-# Leave extra settings blank unless otherwise directed by someone from the DCCC (i.e. Rachel)
+# Leave extra settings blank unless otherwise directed by someone from the DCC (i.e. Rachel)
+
 extraSettings <- ""
 
 # Below are the tables possible in the CODI data model.  If any tables have been named 
 # differently (i.e, "VITAL_SIGNS" instead of VITAL), update the text within the quotes
 # to your CODI table names.
+
 ALERT <- "ALERT"
 ASSET_DELIVERY <- "ASSET_DELIVERY"
 CENSUS_DEMOG <- "CENSUS_DEMOG"
