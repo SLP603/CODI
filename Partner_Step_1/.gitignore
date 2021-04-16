@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.Ruserdata
+inst/doc
+
+inst/rmd/P1\.docx
+inst/rmd/P2\.docx
+inst/doc\.html
+inst/doc\.R
+
+inst/rmd/P1_files/figure-docx/
+
+inst/rmd/P2_files/figure-docx/
+packrat/lib*/
+/inst/rmd/~$TableStyle6.docx
