@@ -12,7 +12,7 @@ install.packages("renv")```
 6) Edit the file to include the credentials you need to connect to your CODI VDW.  If you're not sure what you should put into these fields, check with your database administrator at your site.
 7) Scroll down in the Setup.r file and enter your site's PartnerID.  This ID depends on who you are.
 8) If your site has used different table names than those that are in the COID data model manual, you can update those at the bottom of the Setup.r file.  If you used only the table names from the CODI data model, leave these table names along.
-9) At the top of the CodeToRun.r file, click the Source button to start the run.  If there are any errors, those should be dispalyed in the console.
+9) At the top of the CodeToRun.r file, click the Source button to start the run.  If there are any errors, those should be displayed in the console.
 10) If the program succeeds, a new file named study_cohort_demographic_.csv should appear in location of the program.  Review this file and then submit the csv back to the DCC to be processed
 
 For Non-Rstudio Users:
