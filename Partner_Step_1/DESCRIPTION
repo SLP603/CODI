@@ -1,5 +1,4 @@
 Package: CODIRStep1
-TYPE: Package
 Title: CODI R Step 1
 Version: 0.1
 Authors@R: person("Will", "Carter", email = "William.A.Carter@cuanschutz.edu",
