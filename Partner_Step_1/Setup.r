@@ -1,7 +1,7 @@
 # Enter the server name and database name of your CODI VDW
 
-ServerName <- "localhost"
-DatabaseName <- "VDW_3_4_DH_1120"
+ServerName <- ""
+DatabaseName <- ""
 
 # If you use a specific username and password to connect to your CODI VDW enter those below.
 # If you just use your windows credentials to connect, leave these blank.
