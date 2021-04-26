@@ -17,17 +17,15 @@ FROM (
   	latitude, 
   	longitude --, 
   FROM (
-  	SELECT 
-  		linkid, 
-  		ec.patid, 
-  		ec.yr, 
-  		encN, 
-  		(SELECT MAX(CONVERT(date, loc_start))
-  			FROM @CENSUS_LOCATION cl 
-  			WHERE ec.patid = PERSON_ID
-  			AND loc_start <= CONVERT(datetime, '12-31-'+CAST( ec.yr AS VARCHAR(4)))
-  		) AS latest_loc_date
-  	FROM #enc_counts ec
+	SELECT 
+		linkid, 
+		enc_counts.patid, 
+		enc_counts.yr, 
+		encN, 
+		ec_test_latest_loc_date.latest_loc_date
+	FROM enc_counts 
+		LEFT JOIN ec_test_latest_loc_date ON enc_counts.patid = ec_test_latest_loc_date.PERSON_ID
+		AND enc_counts.yr = ec_test_latest_loc_date.yr
   ) AS enc_counts_loc
   LEFT JOIN @CENSUS_LOCATION cl ON cl.PERSON_ID = enc_counts_loc.patid 
   				AND loc_start = enc_counts_loc.latest_loc_date 
