@@ -10,7 +10,7 @@ SELECT PERSON_ID AS patid
 		WHEN PERSON_ID IN (
 				(
 					SELECT patid
-					FROM @SESSION
+					FROM @SCHEMA.@SESSION
 					WHERE DATEPART(YEAR, session_date) = 2017
 						AND programid IN (
 							SELECT programid
@@ -22,7 +22,7 @@ SELECT PERSON_ID AS patid
 		ELSE 0
 		END AS inclusion
 INTO #study_cohort_inclusion
-FROM @DEMOGRAPHIC
+FROM @SCHEMA.@DEMOGRAPHIC
 WHERE CASE 
 		WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, birth_date, '1/1/2017'), birth_date), '1/1/2017') < 0
 			THEN DATEDIFF(YEAR, birth_date, '1/1/2017') - 1

@@ -27,7 +27,7 @@ FROM (
 		LEFT JOIN ec_test_latest_loc_date ON enc_counts.patid = ec_test_latest_loc_date.PERSON_ID
 		AND enc_counts.yr = ec_test_latest_loc_date.yr
   ) AS enc_counts_loc
-  LEFT JOIN @CENSUS_LOCATION cl ON cl.PERSON_ID = enc_counts_loc.patid 
+  LEFT JOIN @SCHEMA.@CENSUS_LOCATION cl ON cl.PERSON_ID = enc_counts_loc.patid 
   				AND loc_start = enc_counts_loc.latest_loc_date 
-  JOIN @DEMOGRAPHIC d ON d.PERSON_ID = enc_counts_loc.patid
+  JOIN @SCHEMA.@DEMOGRAPHIC d ON d.PERSON_ID = enc_counts_loc.patid
 ) a;

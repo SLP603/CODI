@@ -9,17 +9,17 @@ SELECT
 			ELSE DATEDIFF(YEAR, birth_date, '1/1/2017')
 			END AS study_age_yrs
 INTO #study_cohort
- FROM @DEMOGRAPHIC
+ FROM @SCHEMA.@DEMOGRAPHIC
  WHERE PERSON_ID IN (
 	SELECT 
 		patid 
 	FROM 
-		@SESSION s
+		@SCHEMA.@SESSION s
 		 WHERE DATEPART(YEAR, session_date) = 2017
 		 AND programid IN (SELECT programid from #study_programs)
 	EXCEPT 
 	SELECT patid  
-	FROM @SESSION s
+	FROM @SCHEMA.@SESSION s
 		WHERE session_date >= '1-Jun-2016' AND session_date < '1-Jan-2017'
 		AND programid IN (SELECT programid from #study_programs)
  )

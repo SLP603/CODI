@@ -80,7 +80,8 @@ renderSqlText <- function(query_text, render=T){
                                     REFERRAL = REFERRAL,
                                     SESSION = SESSION,
                                     SESSION_ALERT = SESSION_ALERT,
-                                    VITAL = VITAL)
+                                    VITAL = VITAL,
+                                    SCHEMA = SCHEMA)
   }
   return(query_text)
 }

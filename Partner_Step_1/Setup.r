@@ -3,6 +3,10 @@
 ServerName <- ""
 DatabaseName <- ""
 
+# The default schema for SQL Server is "dbo". If you have used a different schema, specify
+#  it here
+schema <- "dbo"
+
 # If you use a specific username and password to connect to your CODI VDW enter those below.
 # If you just use your windows credentials to connect, leave these blank.
 
