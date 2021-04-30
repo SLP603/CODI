@@ -9,7 +9,7 @@ SELECT
 			ELSE DATEDIFF(YEAR, birth_date, '1/1/2017')
 			END AS study_age_yrs
 INTO #study_cohort
- FROM @SCHEMA.@DEMOGRAPHIC
+ FROM @SCHEMA.@DEMOGRAPHICS
  WHERE PERSON_ID IN (
 	SELECT 
 		patid 

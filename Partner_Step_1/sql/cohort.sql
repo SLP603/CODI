@@ -42,5 +42,5 @@ SELECT d.PERSON_ID
 		ELSE 'F'
 		END
 -- TODO: Read study_cohort from the DCC file.
-FROM @SCHEMA.@DEMOGRAPHIC d
+FROM @SCHEMA.@DEMOGRAPHICS d
 LEFT OUTER JOIN #study_cohort s ON d.PERSON_ID = s.patid;

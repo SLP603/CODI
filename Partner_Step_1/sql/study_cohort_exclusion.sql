@@ -23,7 +23,7 @@ SELECT PERSON_ID AS patid
 		ELSE 0
 		END AS exclusion
 INTO #study_cohort_exclusion
-FROM @SCHEMA.@DEMOGRAPHIC
+FROM @SCHEMA.@DEMOGRAPHICS
 WHERE CASE 
 		WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, birth_date, '1/1/2017'), birth_date), '1/1/2017') < 0
 			THEN DATEDIFF(YEAR, birth_date, '1/1/2017') - 1
