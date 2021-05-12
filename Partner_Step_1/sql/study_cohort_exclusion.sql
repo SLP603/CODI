@@ -10,7 +10,7 @@ SELECT PERSON_ID AS patid
 		WHEN PERSON_ID IN (
 				(
 					SELECT patid
-					FROM dbo.session
+					FROM @SESSION
 					WHERE session_date >= '1-Jun-2016'
 						AND session_date < '1-Jan-2017'
 						AND programid IN (

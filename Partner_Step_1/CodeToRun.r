@@ -20,10 +20,11 @@ tryCatch({
   result8 <- run_db_query(conn, readSql(here("sql", "study_cohort.sql")))
   result9 <- run_db_query(conn, readSql(here("sql", "study_cohort_inclusion.sql")))
   result10 <- run_db_query(conn, readSql(here("sql", "study_cohort_exclusion.sql")))
-  result11 <- run_db_query(conn, readSql(here("sql", "study_cohort.sql")))
+  result10 <- run_db_query(conn, readSql(here("sql", "recent_well_child.sql")))
   result12 <- run_db_query(conn, readSql(here("sql", "encounter_count.sql")))
   result13 <- run_db_query(conn, readSql(here("sql", "study_cohort_export.sql")))
   result14 <- run_db_query(conn, readSql(here("sql", "cohort.sql")))
+  result15 <- run_db_query(conn, readSql(here("sql", "study_cohort_demographic.sql")))
 
   sqlResult <- run_db_query(conn, "SELECT * FROM #study_cohort_demographic")
 }, error = function(cond){
