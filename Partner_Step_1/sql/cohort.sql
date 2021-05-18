@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS #cohort;
 CREATE TABLE #cohort (
-		patid VARCHAR(255) PRIMARY KEY
+		person_id VARCHAR(255) PRIMARY KEY
 		,ageyrs INTEGER
 		,-- Is this the right unit?
 		sex VARCHAR(2)
@@ -18,7 +18,7 @@ CREATE TABLE #cohort (
 		);
 
 INSERT INTO #cohort (
-	patid
+	person_id
 	,ageyrs
 	,sex
 	,pat_pref_language_spoken
@@ -37,10 +37,10 @@ SELECT d.PERSON_ID
 	,RACE1
 	,hispanic
 	,CASE 
-		WHEN s.patid IS NOT NULL
+		WHEN s.person_id IS NOT NULL
 			THEN 'T'
 		ELSE 'F'
 		END
 -- TODO: Read study_cohort from the DCC file.
 FROM @SCHEMA.@DEMOGRAPHICS d
-LEFT OUTER JOIN #study_cohort s ON d.PERSON_ID = s.patid;
+LEFT OUTER JOIN #study_cohort s ON d.PERSON_ID = s.person_id;

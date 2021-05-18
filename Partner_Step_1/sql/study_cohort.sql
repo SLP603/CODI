@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS #study_cohort;
 GO
 SELECT 
-	PERSON_ID AS patid, 
+	PERSON_ID AS person_id, 
 	birth_date, 
 	CASE 
 			WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, birth_date, '1/1/2017'), birth_date), '1/1/2017') < 0
@@ -12,13 +12,13 @@ INTO #study_cohort
  FROM @SCHEMA.@DEMOGRAPHICS
  WHERE PERSON_ID IN (
 	SELECT 
-		patid 
+		person_id 
 	FROM 
 		@SCHEMA.@SESSION s
 		 WHERE DATEPART(YEAR, session_date) = 2017
 		 AND programid IN (SELECT programid from #study_programs)
 	EXCEPT 
-	SELECT patid  
+	SELECT person_id  
 	FROM @SCHEMA.@SESSION s
 		WHERE session_date >= '1-Jun-2016' AND session_date < '1-Jan-2017'
 		AND programid IN (SELECT programid from #study_programs)
