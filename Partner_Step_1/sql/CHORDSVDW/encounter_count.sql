@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS #encounter_count;
 SELECT 
-	PERSON_ID AS person_id, 
+	PERSON_ID AS patid, 
 	COUNT(ENC_ID) enc_count
 INTO #encounter_count
 FROM @SCHEMA.@ENCOUNTERS

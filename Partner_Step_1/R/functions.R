@@ -27,31 +27,38 @@ getConnectionString <- function(){
 getNewDBConnection <- function(){
   connection_string <- getConnectionString()
   #db_conn <- DBI::dbConnect(odbc::odbc(), "SQL Server", .connection_string = connection_string )
-  db_conn <- RODBC::odbcDriverConnect(connection = connection_string, rows_at_time = 1)
+  db_conn <- RODBC::odbcDriverConnect(connection = connection_string, believeNRows = FALSE, rows_at_time = 1, )
   return(db_conn)
 }
 
-run_db_query <- function(db_conn = NULL, query_text = NULL, renderSql = T, ...) {
-  if (is.null(query_text)) {
-    stop("No query argument was passed to function")
+run_db_query <- function(db_conn = NULL, query_text = NULL, renderSql = T, sql_location = NULL, ...) {
+  if (is.null(query_text) && is.null(sql_location)) {
+    stop("No query argument or file location was passed to function")
+  }
+  if(is.null(query_text) && !is.null(sql_location)){
+    print(paste0("Reading Sql From ", sql_location))
+    query_text = readSql(here(sql_location))
   }
   
-  rendered_sql_query <- renderSqlText(query_text = query_text, render = renderSql )
+  rendered_sql_query <- renderSqlText(query_text = query_text, render = renderSql)
   
-  result <- R.utils::withTimeout(
+  sqlResult <- R.utils::withTimeout(
     tryCatch({
-      result <- RODBC::sqlQuery(channel = db_conn, query = rendered_sql_query, errors = F)
-      return(result)
-    }, error = function(cond) {
-      stop(error)
-    }, finally = {
-      if (result == -1L){
+      if (db_conn){
+        lowSqlResult <- RODBC::sqlQuery(channel = db_conn, query = rendered_sql_query, errors = F)
+        return(lowSqlResult)
+      }
+    }, catch = function(err){
+        stop(err)
+    }, finally = function(){
+      browser()
+      if (lowSqlResult == -1L){
         error <- RODBC::odbcGetErrMsg(db_conn)
         stop(error)
         RODBC::odbcClearError(db_conn)
       }
     }), onTimeout = 'error', timeout = 2100)
-  return(result)
+  return(sqlResult)
 }
 
 renderSqlText <- function(query_text, render=T){
@@ -81,7 +88,8 @@ renderSqlText <- function(query_text, render=T){
                                     SESSION = SESSION,
                                     SESSION_ALERT = SESSION_ALERT,
                                     VITAL_SIGNS = VITAL_SIGNS,
-                                    SCHEMA = SCHEMA)
+                                    SCHEMA = SCHEMA,
+                                    PERSON_ID_PATID = PERSON_ID_PATID)
   }
   return(query_text)
 }

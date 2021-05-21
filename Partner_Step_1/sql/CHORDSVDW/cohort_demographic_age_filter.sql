@@ -3,8 +3,8 @@ SELECT *
 INTO #cohort_demographic_age_filter 
 FROM (
   SELECT 
-  	cid,
-  	person_id,
+  	linkid,
+  	patid,
   	encN,
   	birth_date,
   	sex,

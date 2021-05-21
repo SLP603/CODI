@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS #study_cohort_inclusion;
-SELECT PERSON_ID AS person_id
+SELECT PERSON_ID AS patid
 	,birth_date
 	,CASE 
 		WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, birth_date, '1/1/2017'), birth_date), '1/1/2017') < 0
@@ -9,13 +9,13 @@ SELECT PERSON_ID AS person_id
 	,CASE 
 		WHEN PERSON_ID IN (
 				(
-					SELECT person_id
+					SELECT @PERSON_ID_PATID
 					FROM @SCHEMA.@SESSION
 					WHERE DATEPART(YEAR, session_date) = 2017
-						AND programid IN (
-							SELECT programid
-							FROM #study_programs
-							)
+						--AND programid IN (
+						--	SELECT programid
+						--	FROM #study_programs
+						--	)
 					)
 				)
 			THEN 1

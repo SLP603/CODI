@@ -4,7 +4,7 @@
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://cran.rstudio.com"
+        "URL": "https://cloud.r-project.org"
       }
     ]
   },
@@ -39,10 +39,15 @@
     },
     "SqlRender": {
       "Package": "SqlRender",
-      "Version": "1.7.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c9f77eea223a6942eea0072b72e6ceb9"
+      "Version": "1.7.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "sqlrender",
+      "RemoteUsername": "ohdsi",
+      "RemoteRef": "develop",
+      "RemoteSha": "0909a347e9597475615c9e2389e05ae0baa40702",
+      "Hash": "12d9ee3f9656f09e3fe22ac96456477a"
     },
     "here": {
       "Package": "here",
@@ -53,10 +58,10 @@
     },
     "rJava": {
       "Package": "rJava",
-      "Version": "0.9-13",
+      "Version": "1.0-4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "cfcca6464c6d145e28924800b5bd7f44"
+      "Hash": "0cd1ee479ba887170411af6d81705003"
     },
     "renv": {
       "Package": "renv",
@@ -67,10 +72,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.10",
+      "Version": "0.4.11",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "599df23c40a4fce9c7b4764f28c37857"
+      "Hash": "515f341d3affe0de9e4a7f762efb0456"
     },
     "rprojroot": {
       "Package": "rprojroot",

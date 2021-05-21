@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS #cohort;
 CREATE TABLE #cohort (
-		person_id VARCHAR(255) PRIMARY KEY
+		patid VARCHAR(255) PRIMARY KEY
 		,ageyrs INTEGER
 		,-- Is this the right unit?
 		sex VARCHAR(2)
@@ -18,7 +18,7 @@ CREATE TABLE #cohort (
 		);
 
 INSERT INTO #cohort (
-	person_id
+	patid
 	,ageyrs
 	,sex
 	,pat_pref_language_spoken
@@ -28,19 +28,19 @@ INSERT INTO #cohort (
 	)
 SELECT d.PERSON_ID
 	,CASE 
-		WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, birth_date, '1/1/2017'), birth_date), '1/1/2017') < 0
-			THEN DATEDIFF(YEAR, birth_date, '1/1/2017') - 1
-		ELSE DATEDIFF(YEAR, birth_date, '1/1/2017')
+		WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, d.birth_date, '1/1/2017'), d.birth_date), '1/1/2017') < 0
+			THEN DATEDIFF(YEAR, d.birth_date, '1/1/2017') - 1
+		ELSE DATEDIFF(YEAR, d.birth_date, '1/1/2017')
 		END
 	,GENDER
 	,PRIMARY_LANGUAGE
 	,RACE1
 	,hispanic
 	,CASE 
-		WHEN s.person_id IS NOT NULL
+		WHEN s.patid IS NOT NULL
 			THEN 'T'
 		ELSE 'F'
 		END
 -- TODO: Read study_cohort from the DCC file.
 FROM @SCHEMA.@DEMOGRAPHICS d
-LEFT OUTER JOIN #study_cohort s ON d.PERSON_ID = s.person_id;
+LEFT OUTER JOIN #study_cohort s ON d.PERSON_ID = s.patid;
