@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 /Partner_Step_1/*.Rhistory
+/Partner_Step_1/output/*.csv
