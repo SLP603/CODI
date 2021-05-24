@@ -1,10 +1,10 @@
 {
   "R": {
-    "Version": "4.0.5",
+    "Version": "3.6.1",
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://cran.rstudio.com"
+        "URL": "https://cloud.r-project.org"
       }
     ]
   },
@@ -23,12 +23,19 @@
       "Repository": "CRAN",
       "Hash": "b203113193e70978a696b2809525649d"
     },
-    "cli": {
-      "Package": "cli",
-      "Version": "2.5.0",
+    "assertthat": {
+      "Package": "assertthat",
+      "Version": "0.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a94ba44cee3ea571e813721e64184172"
+      "Hash": "50c838a310445e954bc13f26f26a6ecf"
+    },
+    "cli": {
+      "Package": "cli",
+      "Version": "2.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3e3f28efcadfda442cd18651fbcbbecf"
     },
     "clipr": {
       "Package": "clipr",
@@ -158,10 +165,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.11",
+      "Version": "0.4.10",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "515f341d3affe0de9e4a7f762efb0456"
+      "Hash": "599df23c40a4fce9c7b4764f28c37857"
     },
     "rprojroot": {
       "Package": "rprojroot",

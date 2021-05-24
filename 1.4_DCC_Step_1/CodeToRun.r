@@ -15,9 +15,7 @@ library(dplyr)
 library(tidyr)
 library(readr)
 library(here)
-library(stringr)
 library(utils)
-library(readr)
 
 setwd(".")
 
