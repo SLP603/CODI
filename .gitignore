@@ -4,3 +4,7 @@
 .Ruserdata
 /Partner_Step_1/*.Rhistory
 /Partner_Step_1/output/*.csv
+/1.4_DCC_Step_1/partner_step_1_out/*.csv
+/1.4_DCC_Step_1/DCC_out/*.csv
+/1.4_DCC_Step_1/.Rhistory
+/1.4_DCC_Step_1/.RData
