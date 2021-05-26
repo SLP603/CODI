@@ -17,9 +17,9 @@ install.packages("renv")```
 	+ Set PartnerID for your site
 	+ If your table names are different than the standard table names (e.g.: `CHORDS_DEMOGRAPHICS` instead of `DEMOGRAPHICS`) you can adjust the table names section to match your site's configuration
 	+ If you implemented CODI VDW tables but used `person_id` instead of `patid`, update the PERSON_ID_PATID variable from `patid` to `person_id`
-9) After you have updated the Setup.r file, open the CodeToRun.r file.  
-10) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
-11) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
+7) After you have updated the Setup.r file, open the CodeToRun.r file.  
+8) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
+9) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
 
 For Non-Rstudio Users:
 
@@ -35,5 +35,5 @@ For Non-Rstudio Users:
 	+ If you implemented CODI VDW tables but used `person_id` instead of `patid`, update the PERSON_ID_PATID variable from `patid` to `person_id`
 6) Open the R_Location.txt file with Notepad (not Microsoft Word) and edit the location of where R is installed.  This should match the location you entered into the CHORDS Datamart client. 
 7) Save the R_Location.txt file.
-9) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console
-10) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
+8) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console
+9) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
