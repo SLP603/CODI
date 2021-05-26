@@ -10,7 +10,6 @@
 
 options(scipen=999) # prevent scientific notation
 
-
 library(dplyr)
 library(tidyr)
 library(readr)
@@ -212,88 +211,6 @@ demo_loc_norm <- demo_loc
 
 length(unique(demo_loc$linkid)) *3
 
-
-# ##### EXPERIMENTAL CY LOCATION  ASSUMPTION #####
-# ### Assumptions for partial missing location for certain CY, include if desired and document
-# # number of LINKID with partial missing location for certain CY
-# (demo_loc %>% group_by(linkid) %>% tally())$n %>% table()
-#
-# # append column to track number of CY with sites per LINKID
-# demo_loc_fix_prep <- demo_loc %>% group_by(linkid) %>% add_tally(name = "n_yr")
-#
-# ### for 1 CY available
-# demo_loc_fix_prep_1 <- demo_loc_fix_prep %>%
-#         filter(n_yr == "1") %>%  # choose those with 1 CY available
-#         mutate(need = 3) %>% # append freq column for each row (need 3 per linkid in this case)
-#         uncount(need) %>% # expand by need count per linkid
-#         group_by(linkid) %>% # group for next step
-#         mutate(yr_new = 2017:2019) %>% # edit years so it's one per CY
-#         select(linkid, site, yr = yr_new, loc_start, census_location_id)# save/edit original columns
-#
-# demo_loc_fix_prep_1 %>% View()
-#
-#
-# ### for 2 CY available
-#
-# # filter out those with only 2 CY for location
-# demo_loc_fix_prep_2 <- demo_loc_fix_prep %>%
-#         filter(n_yr == "2")
-#
-# # create base df with 3 CY to join with
-# demo_loc_fix_prep_base <- demo_loc_fix_prep_2 %>%
-#         select(linkid) %>%
-#         unique() %>%
-#         mutate(need = 3) %>% # append freq column for each row (need 3 per linkid in this case)
-#         uncount(need) %>% # expand by need count per linkid
-#         group_by(linkid) %>%
-#         mutate(yr = 2017:2019)
-# demo_loc_fix_prep_base %>% View()
-#
-# # join to have empty rows for remaining CY
-# demo_loc_fix_prep_2_step <- left_join(demo_loc_fix_prep_base, demo_loc_fix_prep_2, by = c("linkid", "yr"))
-# demo_loc_fix_prep_2_step <- demo_loc_fix_prep_2_step %>%
-#         group_by(linkid) %>%
-#         arrange(linkid, yr)
-#
-# demo_loc_fix_prep_2 <- demo_loc_fix_prep_2_step
-#
-# # for loop to fix each instance
-# # if CY 2017 is missing location, use next year's info
-# # if CY 2018 or 2019 is missing location, use previous year's info
-# for (i in 1:length(demo_loc_fix_prep_2$linkid)) {
-#
-#         if(is.na(demo_loc_fix_prep_2$loc_start[i])){
-#
-#                 if(demo_loc_fix_prep_2$yr[i] == 2017) {
-#
-#                         demo_loc_fix_prep_2$site[i] = demo_loc_fix_prep_2$site[i + 1]
-#                         demo_loc_fix_prep_2$loc_start[i] = demo_loc_fix_prep_2$loc_start[i + 1]
-#                         demo_loc_fix_prep_2$census_location_id[i] = demo_loc_fix_prep_2$census_location_id[i + 1]
-#
-#                 } else if(demo_loc_fix_prep_2$yr[i] == 2018 | demo_loc_fix_prep_2$yr[i] == 2019) {
-#
-#                         demo_loc_fix_prep_2$site[i] = demo_loc_fix_prep_2$site[i - 1]
-#                         demo_loc_fix_prep_2$loc_start[i] = demo_loc_fix_prep_2$loc_start[i - 1]
-#                         demo_loc_fix_prep_2$census_location_id[i] = demo_loc_fix_prep_2$census_location_id[i - 1]
-#
-#                 }
-#         }
-# }
-#
-# demo_loc_fix_prep_2 %>% View()
-#
-# # filter for n_yr == 3
-# demo_loc_fix_prep_3 <- demo_loc_fix_prep %>%
-#         filter(n_yr == "3")
-#
-# # append each fix to rebuild data
-# demo_loc <- rbind(demo_loc_fix_prep_1,
-#       demo_loc_fix_prep_2,
-#       demo_loc_fix_prep_3)
-#
-
-
-#demo_recon_loc <- left_join(demo_enc_vital_recon, demo_loc, by = "linkid")
 demo_recon_loc <- left_join(demo_enc_vital_recon, demo_loc_norm, by = "linkid")
 
 demo_recon_loc %>% View()
@@ -305,22 +222,4 @@ for(returnPartner in participants){
   demo_recon_loc_temp <- demo_recon_loc %>% filter(site == returnPartner) %>% select(linkid, site, yr)
   write.csv(demo_recon_loc_temp, file = paste0("./output/demo_recon_loc_", returnPartner, ".csv"), na = "", row.names = F)
 }
-
-
-## NEED TO TEST BELOW, maybe duplicate and modify a few rows with new sites to force tie breaks
-##
-
-
-
-#### for tests ####
-#
-# cdm_demo %>% group_by(patid)
-#
-# demo_enc_vital %>% group_by(patid)
-#
-# identical(demo_enc_vital$patid, cdm_demo$patid)
-# anti_join(demo_enc_vital, cdm_demo, by = "patid") %>% group_by(patid)
-#
-# codi_link %>% group_by(linkid)
-
 
