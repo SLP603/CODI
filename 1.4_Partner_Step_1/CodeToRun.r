@@ -5,7 +5,7 @@ Sys.setenv(RENV_PROFILE = paste0("R", rMjrVersion, sep=''))
 }
 renv::restore()
 
-library("RODBC")
+library("DBI")
 library("here")
 library("SqlRender")
 
@@ -44,7 +44,7 @@ result <- tryCatch({
 }, error = function(err) {
   stop(err)
 }, finally = function(){
-  tryCatch({RODBC::odbcClose(conn)})
+  tryCatch({DBI::dbDisconnect(conn)})
 })
 
 dir.create(here("./output"), showWarnings = F)

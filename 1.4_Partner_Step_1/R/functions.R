@@ -26,8 +26,7 @@ getConnectionString <- function(){
 
 getNewDBConnection <- function(){
   connection_string <- getConnectionString()
-  #db_conn <- DBI::dbConnect(odbc::odbc(), "SQL Server", .connection_string = connection_string )
-  db_conn <- RODBC::odbcDriverConnect(connection = connection_string, believeNRows = FALSE, rows_at_time = 1, )
+  db_conn <- DBI::dbConnect(odbc::odbc(), "SQL Server", .connection_string = connection_string)
   return(db_conn)
 }
 
@@ -44,19 +43,12 @@ run_db_query <- function(db_conn = NULL, query_text = NULL, renderSql = T, sql_l
   
   sqlResult <- R.utils::withTimeout(
     tryCatch({
-      if (db_conn){
-        lowSqlResult <- RODBC::sqlQuery(channel = db_conn, query = rendered_sql_query, errors = F)
+      if (!is.null(db_conn)){
+        lowSqlResult <- DBI::dbGetQuery(conn = db_conn, statement = rendered_sql_query, immediate = TRUE)
         return(lowSqlResult)
       }
     }, catch = function(err){
         stop(err)
-    }, finally = function(){
-      browser()
-      if (lowSqlResult == -1L){
-        error <- RODBC::odbcGetErrMsg(db_conn)
-        stop(error)
-        RODBC::odbcClearError(db_conn)
-      }
     }), onTimeout = 'error', timeout = 2100)
   return(sqlResult)
 }
