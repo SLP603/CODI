@@ -37,9 +37,8 @@ result <- tryCatch({
   tryCatch({DBI::dbDisconnect(conn)})
 })
 
-dir.create(here("output", paste0("Step", CODISTEP)), showWarnings = F)
-
-outputFile <- here("output", paste0("Step", CODISTEP), paste0("study_cohort_demographic_", PartnerID, ".csv"))
+dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
+outputFile <- here("output", paste0("Step_", CODISTEP), paste0("study_cohort_demographic_", PartnerID, ".csv"))
 print(paste0("Writing Results to outputFile", outputFile))
 write.csv(x = sqlResult, 
           file = outputFile, 
