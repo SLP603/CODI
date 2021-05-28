@@ -1,8 +1,11 @@
 if (Sys.getenv("RENV_PROFILE") == ''){
   rMjrVersion <- version[['major']]
-  print(paste0("R version ",rMjrVersion, " detected"))
+  cat(paste0("R version ",rMjrVersion, " detected\n"))
   Sys.setenv(RENV_PROFILE = paste0("R", rMjrVersion, sep=''))
   options(pkgType="win.binary")
+  options(install.packages.check.source = "no")
+  options(install.packages.compile.from.source = "never")
+  source("renv/activate.R")
 }
 
 renv::restore()

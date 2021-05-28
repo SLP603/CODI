@@ -39,10 +39,10 @@ result <- tryCatch({
 
 dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
 outputFile <- here("output", paste0("Step_", CODISTEP), paste0("study_cohort_demographic_", PartnerID, ".csv"))
-print(paste0("Writing Results to outputFile", outputFile))
+cat(paste0("Writing Results to outputFile:\n\t", outputFile, "\n"))
 write.csv(x = sqlResult, 
           file = outputFile, 
           row.names = F, 
           quote = T, na = "NULL")
 
-print(paste0("CODI Step ", CODISTEP, " done"))
+message(paste0("CODI Step ", CODISTEP, " done!"))

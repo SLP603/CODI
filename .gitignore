@@ -10,3 +10,4 @@
 /1.4_DCC/.RData
 /1.4_Partner_Step_1/output/**/*.csv
 /1.4_Partner/*.RData
+/1.4_Partner/output/Step1/*.csv

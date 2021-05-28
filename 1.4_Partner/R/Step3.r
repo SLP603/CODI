@@ -29,4 +29,4 @@ result <- tryCatch({
 
 dir.create(here(paste0("Step", CODISTEP), "output"), showWarnings = F)
 
-print(paste0("CODI Step ", CODISTEP, " done"))
+message(paste0("CODI Step ", CODISTEP, " done!"))
