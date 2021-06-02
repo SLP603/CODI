@@ -32,6 +32,14 @@ if(!exists("CODISTEP")){
 
 baseDir <- here()
 
+if(Sys.info()[["machine"]] =="x86"){
+  warning("32 bit verion of R may encounter issues.  Consider switching to 64 bit.")
+}
+
+if (GET_JAVA == T || Sys.getenv("JAVA_HOME") ==""){
+  getJava(baseDir)
+}
+
 if(CODISTEP == 1) {
   
   source(here("R", "Step1.r"))
