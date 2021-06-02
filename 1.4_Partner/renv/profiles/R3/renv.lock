@@ -4,7 +4,7 @@
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://cran.rstudio.com"
+        "URL": "https://cloud.r-project.org"
       }
     ]
   },
@@ -54,14 +54,9 @@
     "SqlRender": {
       "Package": "SqlRender",
       "Version": "1.7.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "SqlRender",
-      "RemoteUsername": "OHDSI",
-      "RemoteRef": "develop",
-      "RemoteSha": "baf6ca934a873c089c8c61553f5289257c04257b",
-      "Hash": "4767119f820ec5ae43d9658e66d0c3f5"
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c9f77eea223a6942eea0072b72e6ceb9"
     },
     "bit": {
       "Package": "bit",

@@ -66,8 +66,3 @@ LINK <- ifelse(DATAMODEL == "CHORDSVDW", "LINKAGE", "LINK")
 #  they can be set here. These settings are ignored for the VDW 3.5.
 PERSON_ID_PATID <- "patid"
 
-# Get JavaRuntime (experimental).  If for some reason java is not installed on the machine,
-#  set this flag to TRUE.  This will attempt to get a small java runtime environment to 
-#  run java dependencies. This is only compatible with the 64 bit version of R.
-GET_JAVA <- FALSE
-

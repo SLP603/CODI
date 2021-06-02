@@ -16,6 +16,9 @@ options(scipen=999)
 source(here("Setup.r"))
 source(here("R", "functions.r"))
 
+baseDir <- here()
+checkJava(baseDir)
+
 if (DATAMODEL == "CHORDSVDW") {
   sqlType <- "CHORDSVDW"
 } else if (DATAMODEL == "CODIVDW"){
@@ -30,14 +33,8 @@ if(!exists("CODISTEP")){
   CODISTEP <- as.numeric(CODISTEP)
 }
 
-baseDir <- here()
-
 if(Sys.info()[["machine"]] =="x86"){
   warning("32 bit verion of R may encounter issues.  Consider switching to 64 bit.")
-}
-
-if (GET_JAVA == T || Sys.getenv("JAVA_HOME") ==""){
-  getJava(baseDir)
 }
 
 if(CODISTEP == 1) {

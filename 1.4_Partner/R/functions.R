@@ -86,17 +86,24 @@ renderSqlText <- function(query_text, render=T){
   return(query_text)
 }
 
-getJava <- function(downloadDirectory){
-  if(Sys.info()[["machine"]] =="x86"){
-    stop("Java 1.8 or greater is not installed.  Contact your IT department to install the Java runtime environment")
-  }
-  if (file.exists(file.path(downloadDirectory, "java_runtime", "bin", "java.exe"))){
-    Sys.setenv("JAVA_HOME"=file.path(downloadDirectory, "java_runtime"))
-    return()
-  } else {
-    download.file("https://github.com/ACCORDSD2VDEV/CODI_HELPER_FILES/raw/main/java-runtime.zip", file.path(downloadDirectory,"java-runtime.zip"))
-    unzip(zipfile = "java-runtime.zip", overwrite = T, exdir = "java_runtime")
-    Sys.setenv("JAVA_HOME"=file.path(downloadDirectory, "java_runtime"))
-    unlink("java-runtime.zip")
+checkJava <- function(downloadDirectory){
+  #checks if rJava can be loaded
+  javaInstalled <- try(suppressWarnings(library("rJava")), silent=TRUE)
+  if(inherits(javaInstalled, "try-error")){
+    if(Sys.info()[["machine"]] =="x86"){
+      stop("64 bit Java 1.8 or greater is not installed.  Contact your IT department to install the Java runtime environment")
+    }
+    if (file.exists(file.path(downloadDirectory, "java_runtime", "bin", "java.exe"))){
+      Sys.setenv("JAVA_HOME"=file.path(downloadDirectory, "java_runtime"))
+      javaInstalled <- try(suppressWarnings(library("rJava")), silent=TRUE)
+      if(inherits(javaInstalled, "try-error")){
+        stop("64 bit Java 1.8 or greater is not installed.  Contact your IT department to install the Java runtime environment")
+      }
+    } else {
+      download.file("https://github.com/ACCORDSD2VDEV/CODI_HELPER_FILES/raw/main/java-runtime.zip", file.path(downloadDirectory,"java-runtime.zip"))
+      unzip(zipfile = "java-runtime.zip", overwrite = T, exdir = "java_runtime")
+      Sys.setenv("JAVA_HOME"=file.path(downloadDirectory, "java_runtime"))
+      unlink("java-runtime.zip")
+    }
   }
 }
