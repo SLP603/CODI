@@ -81,7 +81,8 @@ renderSqlText <- function(query_text, render=T){
                                     SESSION_ALERT = SESSION_ALERT,
                                     VITAL_SIGNS = VITAL_SIGNS,
                                     SCHEMA = SCHEMA,
-                                    PERSON_ID_PATID = PERSON_ID_PATID)
+                                    PERSON_ID_PATID = PERSON_ID_PATID,
+                                    BENEFIT = BENEFIT)
   }
   return(query_text)
 }
