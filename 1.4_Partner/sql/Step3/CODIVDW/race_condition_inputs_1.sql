@@ -6,6 +6,6 @@ SELECT PERSON_ID AS patid
 INTO #race_condition_inputs_1
 FROM @SCHEMA.@DIAGNOSES d
 JOIN #race_con_codes r ON d.DX_CODETYPE = r.dx_type
-	AND UPPER(TRIM(d.DX)) = UPPER(TRIM(r.dx))
+	AND UPPER(RTRIM(LTRIM(d.DX))) = UPPER(RTRIM(LTRIM(r.dx)))
 GROUP BY PERSON_ID
 	,category;

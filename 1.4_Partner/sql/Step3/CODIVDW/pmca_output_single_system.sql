@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS #pmca_output_single_system
 SELECT a.patid
 	,a.body_system
-	,a.body_system_name
+	,b.body_system_name
 	,a.severity
 INTO #pmca_output_single_system
 FROM #pmca_input_single a

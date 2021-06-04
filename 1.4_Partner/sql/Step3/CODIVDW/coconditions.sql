@@ -5,12 +5,12 @@ SELECT d.DIAGNOSES_ID
 	,d.ADATE
 	,d.DX_CODETYPE
 	,d.dx
-	,s.mapTarget
+	,sm.mapTarget
 	,code
 	,condition
 	,DATEPART(YEAR, ADATE) AS year
-INTO #coconditions co
+INTO #coconditions
 FROM @SCHEMA.@DIAGNOSES d
-JOIN #snomed2icd s ON d.dx = s.referencedComponentId
-JOIN #comorb_codes cm ON UPPER(TRIM(sm.code)) LIKE '%' + UPPER(TRIM(s.mapTarget)) + '%'
+JOIN #snomed2icd sm ON d.dx = sm.referencedComponentId
+JOIN #comorb_codes cm ON UPPER(RTRIM(LTRIM(cm.code))) LIKE '%' + UPPER(RTRIM(LTRIM(sm.mapTarget))) + '%'
 WHERE ADATE >= '12/31/2016';

@@ -6,5 +6,5 @@ SELECT a.linkid
 	,b.insurance_type
 INTO #measures_output
 FROM #measures_output_prep a
-LEFT JOIN cohort_demographic_insurance_prep b ON a.linkid = b.linkid;
+LEFT JOIN #cohort_demographic_insurance_prep b ON a.linkid = b.linkid;
 

@@ -4,23 +4,21 @@ suppressWarnings(library("here"))
 suppressWarnings(library("SqlRender"))
 suppressWarnings(suppressPackageStartupMessages(library("dplyr")))
 
-if (DATAMODEL == "CHORDSVDW") {
-	sqlType <- "CHORDSVDW"
-} else if (DATAMODEL == "CODIVDW"){
-	sqlType <- "CODIVDW"
-} else {
-	stop("DATAMODEL not found or missing.  Check the DATAMODEL variable in Setup.r")
-}
 
 snomed2icd <- read.csv(here("csv", "snomed2icd.csv"), stringsAsFactors = F) %>%
   mutate_all(as.character)
+demo_recon_loc_location <- list.files(here("FROM_DCC"), pattern = "demo_recon_loc_*" )
+demo_recon_loc <- read.csv(here("FROM_DCC",demo_recon_loc_location), stringsAsFactors = F, 
+                           colClasses =c("linkid"="character", "site"="character", "yr"="numeric"))
 
 result <- tryCatch({
   
   conn <- getNewDBConnection()
   tempResult1 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "snomed2icd.sql"))
+  cat("Loading SNOMED to ICD codes...\n")
   dbWriteTable(conn, "#snomed2icd", snomed2icd, immediate = T, row.names=F, overwrite=T)
   
+  cat("Loading demo_recon_loc from DCC...\n")
   tempResult2 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "demo_recon_loc.sql"))
   dbWriteTable(conn, "#demo_recon_loc", demo_recon_loc, immediate = T, row.names=F, overwrite=T)
   
@@ -41,19 +39,20 @@ result <- tryCatch({
   tempResult17 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract.sql"))
   tempResult18 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "coconditions.sql"))
   tempResult19 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "diagnosis_CC_ind_any.sql"))
-  tempResult20 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract.sql"))
-  tempResult21 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract_comorb.sql"))
-  tempResult22 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "distinct_cohort.sql"))
-  tempResult23 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input.sql"))
-  tempResult24 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input_system.sql"))
-  tempResult25 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input_single.sql"))
-  tempResult26 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_output_single_system.sql"))
-  tempResult27 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_output_prep.sql"))
-  tempResult28 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_output.sql"))
-  tempResult29 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "measures_output_prep.sql"))
-  tempResult30 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "measures_output.sql"))
-  tempResult31 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_condition_inputs_1.sql"))
-  tempResult32 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_condition_inputs.sql"))
+  tempResult20 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract_prep.sql"))
+  tempResult21 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract.sql"))
+  tempResult22 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract_comorb.sql"))
+  tempResult23 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "distinct_cohort.sql"))
+  tempResult24 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input.sql"))
+  tempResult25 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input_system.sql"))
+  tempResult26 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input_single.sql"))
+  tempResult27 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_output_single_system.sql"))
+  tempResult28 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_output_prep.sql"))
+  tempResult29 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_output.sql"))
+  tempResult30 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "measures_output_prep.sql"))
+  tempResult31 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "measures_output.sql"))
+  tempResult32 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_condition_inputs_1.sql"))
+  tempResult33 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_condition_inputs.sql"))
   
   cohort_tract_comorb <- run_db_query(conn, "SELECT * FROM #cohort_tract_comorb ORDER BY linkid;")
   pmca_output <- run_db_query(conn, "SELECT * FROM #pmca_output ORDER BY pmca;")
@@ -65,6 +64,8 @@ result <- tryCatch({
 }, finally = function(){
   tryCatch({DBI::dbDisconnect(conn)})
 })
+
+dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
 
 writeOutput <- function(fileName, data){
   outputFile <- here("output", paste0("Step_", CODISTEP), paste0(fileName, "_", PartnerID, ".csv"))

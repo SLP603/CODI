@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS #pmca_input
-SELECT DIAGNOSES.PERSON_ID AS patid
+SELECT d.PERSON_ID AS patid
 	,COUNT(DISTINCT body_system) AS body_system
 	,MAX(severity) AS severity
 INTO #pmca_input

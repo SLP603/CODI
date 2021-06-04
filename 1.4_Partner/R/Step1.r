@@ -2,13 +2,6 @@
 suppressWarnings(library("here"))
 suppressWarnings(library("SqlRender"))
 
-if (DATAMODEL == "CHORDSVDW") {
-	sqlType <- "CHORDSVDW"
-} else if (DATAMODEL == "CODIVDW"){
-	sqlType <- "CODIVDW"
-} else {
-	stop("DATAMODEL not found or missing.  Check the DATAMODEL variable in Setup.r")
-}
 result <- tryCatch({
   conn <- getNewDBConnection()
 

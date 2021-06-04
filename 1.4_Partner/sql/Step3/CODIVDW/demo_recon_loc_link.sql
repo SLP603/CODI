@@ -9,8 +9,8 @@ SELECT
 	b.yr,
 	--#demo_recon_loc.loc_start,
 	--#demo_recon_loc.census_location_id,
-	l.patid
-INTO #demo_recon_loc_link a
+	l.@PERSON_ID_PATID as patid
+INTO #demo_recon_loc_link
 FROM 
 	#demo_recon_loc b
 		LEFT JOIN @SCHEMA.@LINK l ON b.linkid = l.linkid

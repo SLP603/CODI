@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS #demo_recon_loc_tract; 
-GO
+
 SELECT 
 	a.linkid,
 	a.patid,

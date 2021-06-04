@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS #pmca_input_system
-SELECT DIAGNOSES.PERSON_ID AS patid
+SELECT d.PERSON_ID AS patid
 	,body_system AS body_system_name
 	,MAX(severity) AS severity
 --severity
