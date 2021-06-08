@@ -12,3 +12,6 @@
 /1.4_Partner/*.RData
 /1.4_Partner/output/Step1/*.csv
 /1.4_Partner/java_runtime
+/1.4_Partner/From_DCC/*.csv
+/1.4_Partner/output/Step_1/*.csv
+/1.4_Partner/output/Step_3/*.csv
