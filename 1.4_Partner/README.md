@@ -37,3 +37,29 @@ For Non-Rstudio Users:
 7) Save the R_Location.txt file.
 8) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console
 9) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
+
+### Partner Step 3*
+
+*Step 4 occurs immediately after step 3 at the partner site so Step 3 and Step 4 code is combined to run all together.  
+
+1) If the code has been updated, obtain an updated zip from the DCC or download the code from Github as described in Step 1.
+
+For RStudio Users:
+
+2) Open the 1.4Partner.Rproj project file
+3) Update the Setup.r file.
+	 - Most settings from Step 1 will remain the same
+	 - Update the `CODISTEP` variable to *3*
+4) Open the CodeToRun.r file.  
+5) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
+6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
+
+For Non-RStudio Users:
+
+2) Open the directory where you saved the 1.4_Partner code
+3) Update the Setup.r file with a basic text editor like Notepad.
+	 - Most settings from Step 1 will remain the same
+	 - Update the `CODISTEP` variable to *3*
+4) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
+5) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
+6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
