@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS #demo_recon_loc;
+--CREATE TABLE #demo_recon_loc (
+--	linkid varchar(255),
+--	--birth_date date,
+--	--sex varchar(2),
+--	--race varchar(2),
+--	--hispanic varchar(4),
+--	site varchar(5),
+--	yr int --,
+--	--loc_start date,
+--	--census_location_id varchar(255)
+--);

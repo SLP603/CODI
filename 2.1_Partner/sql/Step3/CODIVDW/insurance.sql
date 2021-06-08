@@ -1,0 +1,30 @@
+DROP TABLE IF EXISTS #insurance;
+SELECT e.ENC_ID
+	,e.PERSON_ID
+	,BEN.BENEFIT_CAT
+	,(
+		SELECT CASE 
+				WHEN BENEFIT_CAT IN ('CC', 'CP', 'MC', 'MD')
+					THEN 'Public (non-military)'
+				WHEN BENEFIT_CAT IN ('CO')
+					THEN 'Private'
+				ELSE 'Other or unknown' -- OG, NC, OT, UN, WC, NI
+				END
+		) AS insurance_type
+INTO #insurance
+FROM @SCHEMA.@ENCOUNTERS e
+LEFT JOIN (
+	SELECT *
+	FROM @SCHEMA.@BENEFIT b
+	WHERE b.BENEFIT_TYPE = 'PR'
+	) BEN ON e.ENC_ID = BEN.ENC_ID
+JOIN (
+	SELECT e.PERSON_ID
+		,MAX(ADATE) admin_date
+	FROM @SCHEMA.@ENCOUNTERS e
+	LEFT JOIN @SCHEMA.@BENEFIT b ON e.ENC_ID = b.ENC_ID
+	WHERE b.BENEFIT_CAT IS NOT NULL
+		AND b.BENEFIT_TYPE = 'PR'
+	GROUP BY e.PERSON_ID
+	) ei ON ei.PERSON_ID = e.PERSON_ID
+	AND ei.admin_date = e.ADATE
