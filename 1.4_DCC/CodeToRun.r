@@ -25,6 +25,7 @@ participants <- list()
 participantsData <- list()
 
 for(partner in stepOnePartnerFiles){
+  cat(paste0("loading partner file: ", partner,"\n"))
   pattern <- "study_cohort_demographic_\\s*(.*?)\\s*.csv$"
   partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
   study_cohort_demographic_temp <- read.csv(partner, na = "NULL")
@@ -41,12 +42,12 @@ for(partner in stepOnePartnerFiles){
     participants <- list(partner_id)
   }
 }
-
+cat("merge into one tibble\n")
 # merge into one tibble
 demo_enc_vital_prep <- bind_rows(participantsData)
 
 # convert to proper classes
-demo_enc_vital_prep$linkid <- as.numeric(demo_enc_vital_prep$linkid)
+#demo_enc_vital_prep$linkid <- as.numeric(demo_enc_vital_prep$linkid)
 demo_enc_vital_prep$birth_date <- as.Date(demo_enc_vital_prep$birth_date)
 
 demo_enc_vital_prep$race[demo_enc_vital_prep$race == "NULL"] <- NA
@@ -64,6 +65,7 @@ demo_enc_vital_prep_link <- demo_enc_vital_prep %>%
 #preserve demo variables plus linkids, patikds
 demo_link <- demo_enc_vital_prep_link %>% select(linkid, site, birth_date, sex, race, hispanic, sum_encn) %>% arrange(linkid)
 
+cat("Removing duplicate rows\n")
 # keep unique rows
 demo_link_u <- unique(demo_link)
 
@@ -167,6 +169,7 @@ demo_enc_vital_hispanic_recon_final <- sample_n(demo_enc_vital_hispanic_recon_fi
 identical(demo_enc_vital %>% group_by(linkid) %>% dplyr::count(hispanic) %>% slice_max(n, n = 1),
           demo_enc_vital_hispanic_recon_final %>% select(linkid, hispanic, n))
 
+cat("final merge of recon vars\n")
 
 # final merge of recon vars
 demo_enc_vital_recon <- demo_enc_vital_bd_recon_final %>%
@@ -174,7 +177,7 @@ demo_enc_vital_recon <- demo_enc_vital_bd_recon_final %>%
   left_join(demo_enc_vital_race_recon_final, by = "linkid") %>% arrange(linkid) %>%
   left_join(demo_enc_vital_hispanic_recon_final, by = "linkid") %>% arrange(linkid) %>%
   select(linkid, birth_date, sex, race, hispanic)
-demo_enc_vital_recon %>% View()
+#demo_enc_vital_recon %>% View()
 
 length(unique(demo_enc_vital_prep$linkid))
 length(unique(demo_enc_vital_recon$linkid))
@@ -182,16 +185,16 @@ length(unique(demo_enc_vital_recon$linkid))
 dir.create(file.path("./DCC_out"), showWarnings = FALSE)
 
 # write output to csv for site to read in
-write.csv(demo_enc_vital_recon,
-          file = "DCC_out/demo_recon.csv",
-          na = "NULL",
-          row.names = FALSE)
-
+#write.csv(demo_enc_vital_recon,
+#          file = "DCC_out/demo_recon.csv",
+#          na = "NULL",
+#          row.names = FALSE)
+#
 
 demo_loc_prep <- demo_enc_vital_prep %>% select(linkid, site, yr, loc_start)
 
 demo_loc_prep %>% group_by(linkid, yr) %>%
-  arrange(linkid, yr, desc(loc_start)) %>% View()
+  arrange(linkid, yr, desc(loc_start))# %>% View()
 # for each LINKID, keeps last address date per CY
 demo_loc_prep_tie <- demo_loc_prep %>% group_by(linkid, yr) %>%
   arrange(linkid, yr, desc(loc_start)) %>%
@@ -201,7 +204,7 @@ demo_loc_prep_tie <- demo_loc_prep %>% group_by(linkid, yr) %>%
 set.seed(1492)
 demo_loc <- sample_n(demo_loc_prep_tie, 1, replace = TRUE)
 
-demo_loc %>% View()
+#demo_loc %>% View()
 
 # preserve demo_loc up to this point
 demo_loc_norm <- demo_loc
@@ -213,13 +216,15 @@ length(unique(demo_loc$linkid)) *3
 
 demo_recon_loc <- left_join(demo_enc_vital_recon, demo_loc_norm, by = "linkid")
 
-demo_recon_loc %>% View()
-demo_recon_loc %>% filter(is.na(yr)) %>% arrange(linkid) %>% View()
+#demo_recon_loc %>% View()
+demo_recon_loc %>% filter(is.na(yr)) %>% arrange(linkid)# %>% View()
 
 dir.create(file.path("./output"), showWarnings = FALSE)
 
+cat("Creating partner outputs for Step 3")
 for(returnPartner in participants){
   demo_recon_loc_temp <- demo_recon_loc %>% filter(site == returnPartner) %>% select(linkid, site, yr)
   write.csv(demo_recon_loc_temp, file = paste0("./output/demo_recon_loc_", returnPartner, ".csv"), na = "", row.names = F)
 }
 
+message("Done running CODI Step 2")

@@ -2,8 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-/Partner_Step_1/*.Rhistory
-/Partner_Step_1/output/*.csv
 /1.4_DCC/partner_step_1_out/*.csv
 /1.4_DCC/DCC_out/*.csv
 /1.4_DCC/.Rhistory
@@ -15,3 +13,15 @@
 /1.4_Partner/From_DCC/*.csv
 /1.4_Partner/output/Step_1/*.csv
 /1.4_Partner/output/Step_3/*.csv
+/2.1_DCC/partner_step_1_out/*.csv
+/2.1_DCC/DCC_out/*.csv
+/2.1_DCC/.Rhistory
+/2.1_DCC/.RData
+/2.1_Partner_Step_1/output/**/*.csv
+/2.1_Partner/*.RData
+/2.1_Partner/output/Step1/*.csv
+/2.1_Partner/java_runtime
+/2.1_Partner/From_DCC/*.csv
+/2.1_Partner/output/Step_1/*.csv
+/2.1_Partner/output/Step_3/*.csv
+

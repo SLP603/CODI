@@ -9,7 +9,10 @@ JOIN (
 		,'10' AS dx_type
 		,body_system
 		,CASE 
-			WHEN progressive IN ('Yes', 'yes')
+			WHEN progressive IN (
+					'Yes'
+					,'yes'
+					)
 				THEN 2
 			ELSE 1
 			END AS severity
@@ -21,7 +24,10 @@ JOIN (
 		,'SM'
 		,body_system
 		,CASE 
-			WHEN progressive IN ('Yes', 'yes')
+			WHEN progressive IN (
+					'Yes'
+					,'yes'
+					)
 				THEN 2
 			ELSE 1
 			END AS severity
@@ -30,3 +36,4 @@ JOIN (
 	) pmca_codes ON pmca_codes.dx = d.dx
 	AND pmca_codes.dx_type = d.DX_CODETYPE
 GROUP BY d.PERSON_ID;
+

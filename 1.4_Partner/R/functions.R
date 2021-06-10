@@ -108,3 +108,12 @@ checkJava <- function(downloadDirectory){
     }
   }
 }
+
+writeOutput <- function(fileName, data){
+  outputFile <- here("output", paste0("Step_", CODISTEP), paste0(fileName, "_", PartnerID, ".csv"))
+  cat(paste0("Writing Results to outputFile:\n\t", outputFile, "\n"))
+  write.csv(x = data, 
+            file = outputFile, 
+            row.names = F, 
+            quote = T, na = "NULL")
+}

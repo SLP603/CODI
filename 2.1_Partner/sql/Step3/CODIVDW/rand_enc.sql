@@ -1,0 +1,14 @@
+DROP TABLE IF EXISTS #RAND_ENC;
+
+SELECT PERSON_ID
+	,ENC_ID AS random_encounterid
+INTO #RAND_ENC
+FROM (
+	SELECT PERSON_ID
+		,ENC_ID
+		,row_number() OVER (
+			PARTITION BY PERSON_ID ORDER BY NEWID()
+			) rownum
+	FROM #ENCOUNTERS_VITAL_JOIN
+	) shuffled
+WHERE rownum = 1;

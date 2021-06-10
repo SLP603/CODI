@@ -52,7 +52,7 @@ For RStudio Users:
 	 - Update the `CODISTEP` variable to *3*
 4) Open the CodeToRun.r file.  
 5) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
-6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
+6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
 
 For Non-RStudio Users:
 
@@ -62,4 +62,4 @@ For Non-RStudio Users:
 	 - Update the `CODISTEP` variable to *3*
 4) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
 5) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
-6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed
+6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.

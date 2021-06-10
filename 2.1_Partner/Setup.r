@@ -1,6 +1,6 @@
 # Enter the server name and database name of your CODI VDW
-ServerName <- ""
-DatabaseName <- ""
+ServerName <- "cc-s-d05"
+DatabaseName <- "CODI_VDW"
 
 # If you use a specific username and password to connect to your CODI VDW enter those below.
 # If you just use your windows credentials to connect, leave these blank.
@@ -23,7 +23,7 @@ extraSettings <- ""
 DATAMODEL <- "CODIVDW"
 
 # Set the step as 1 or 3
-CODISTEP <- 0
+CODISTEP <- 3
 
 # PatenerID corresponds to the initials of your site and is one of the following:
 #  Children's Hospital of Colorado = ch
@@ -31,7 +31,7 @@ CODISTEP <- 0
 #  Girls on the Run = gotr
 #  hfc?
 #  Kaiser Permanente Colorado = kp
-PartnerID <- ""
+PartnerID <- "dh"
 
 # Below are the tables possible in the CODI data model.  If any tables have been named 
 # differently (i.e, "VITAL_SIGNS" instead of VITAL), update the text within the quotes
@@ -65,5 +65,5 @@ LINK <- ifelse(DATAMODEL == "CHORDSVDW", "LINKAGE", "LINK")
 
 # If CODI Tables where implemented but CHORDS conventional column names were used
 #  they can be set here. These settings are ignored for the VDW 3.5.
-PERSON_ID_PATID <- "patid"
+PERSON_ID_PATID <- "person_id"
 

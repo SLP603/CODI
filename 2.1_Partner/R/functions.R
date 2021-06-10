@@ -1,3 +1,4 @@
+
 getConnectionString <- function(){
   
   connectionString <- "Driver={Sql Server};"
@@ -7,18 +8,18 @@ getConnectionString <- function(){
   }
   
   if(nchar(PortNumber) > 0) {
-    connectionString <- paste(connectionString, "Server=", ServerName, ",", PortNumber, ";Database=", DatabaseName, ";", sep='')
+    connectionString <- paste0(connectionString, "Server=", ServerName, ",", PortNumber, ";Database=", DatabaseName, ";")
   }
   else{
-    connectionString <- paste(connectionString, "Server=", ServerName, ";Database=", DatabaseName, ";", sep='')
+    connectionString <- paste0(connectionString, "Server=", ServerName, ";Database=", DatabaseName, ";")
   }
   
   if(nchar(SQLServerUserName) > 0){
-    connectionString <- paste(connectionString, "UID=", SQLServerUserName,";PWD=", SQLServerPassword, ";", sep='' )
+    connectionString <- paste0(connectionString, "UID=", SQLServerUserName,";PWD=", SQLServerPassword, ";")
   }
   
   if(nchar(extraSettings) > 0) {
-    connectionString <- paste(connectionString, ";", extraSettings, ";", sep='' )
+    connectionString <- paste0(connectionString, ";", extraSettings, ";")
   }
   
   return(connectionString)
@@ -47,8 +48,9 @@ run_db_query <- function(db_conn = NULL, query_text = NULL, renderSql = T, sql_l
         lowSqlResult <- DBI::dbGetQuery(conn = db_conn, statement = rendered_sql_query, immediate = TRUE)
         return(lowSqlResult)
       }
-    }, catch = function(err){
-        stop(err)
+    }, error = function(err){
+      cat(rendered_sql_query)
+      stop(err)
     }), onTimeout = 'error', timeout = 2100)
   return(sqlResult)
 }
@@ -107,4 +109,13 @@ checkJava <- function(downloadDirectory){
       unlink("java-runtime.zip")
     }
   }
+}
+
+writeOutput <- function(fileName, data){
+  outputFile <- here("output", paste0("Step_", CODISTEP), paste0(fileName, "_", PartnerID, ".csv"))
+  cat(paste0("Writing Results to outputFile:\n\t", outputFile, "\n"))
+  write.csv(x = data, 
+            file = outputFile, 
+            row.names = F, 
+            quote = T, na = "NULL")
 }

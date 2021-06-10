@@ -27,8 +27,8 @@ for(partner in stepOnePartnerFiles){
   partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
   study_cohort_demographic_temp <- read.csv(partner, na = "NULL")
 
-  demo_enc_vital_temp <- dplyr::mutate(study_cohort_demographic_temp, site = partner_id) %>%
-    select(linkid, birth_date, sex, race, hispanic, yr, encN, site, loc_start)
+  demo_enc_vital_temp <- dplyr::mutate(study_cohort_demographic_temp, site = partner_id) #%>%
+    #select(linkid, birth_date, sex, race, hispanic, yr, encN, site, loc_start, inclusion, exclusion)
 
   assign(paste0("demo_enc_vital_", toupper(partner_id)), demo_enc_vital_temp)
   participantsData[[partner_id]] <- demo_enc_vital_temp
@@ -125,10 +125,10 @@ demo_sex_recon_final <- sample_n(demo_sex_recon_final_prep, 1, replace = TRUE)
 demo_bd_sex_recon <- left_join(demo_bd_recon_final, demo_sex_recon_final, by = "linkid") %>% 
   arrange(linkid) %>% 
   select(linkid, birth_date, sex)
-demo_bd_sex_recon %>% View()
+#demo_bd_sex_recon %>% View()
 
-length(unique(demo_enc_vital_prep$linkid))
-length(unique(demo_bd_sex_recon$linkid))
+#length(unique(demo_enc_vital_prep$linkid))
+#length(unique(demo_bd_sex_recon$linkid))
 
 # write output to csv for site to read in
 # write.csv(demo_bd_sex_recon, 
@@ -358,12 +358,18 @@ write.csv(demo_index_site_final, file ="./output/demo_index_site_final.csv", row
 cat("Creating partner outputs for Step 3")
 for(returnPartner in participants){
   
-  demo_rwc_ec_temp_index <- left_join(paste0("demo_enc_vital_", returnPartner), demo_index_site_final, by = "linkid")
+  demo_rwc_ec_temp_index <- left_join(get(paste0("demo_enc_vital_", toupper(returnPartner))), demo_index_site_final, by = "linkid")
   
   demo_rwc_ec_temp_index$index_site_flag <- ifelse(demo_rwc_ec_temp_index$site == demo_rwc_ec_temp_index$index_site,
                                                  TRUE,
                                                  FALSE)
   table(demo_rwc_ec_temp_index$index_site_flag)
+  
+  #Change for CHORDS: set 'index_site' to empty string if different from 'site' to mask info from being shared between
+  # partner sites
+  demo_rwc_ec_temp_index$index_site <- ifelse(demo_rwc_ec_temp_index$site == demo_rwc_ec_temp_index$index_site,
+                                              demo_rwc_ec_temp_index$index_site,
+                                              "")
   
   index_site_temp <- demo_rwc_ec_temp_index %>% select(linkid, site, index_site, include, exclude) %>% unique()
   

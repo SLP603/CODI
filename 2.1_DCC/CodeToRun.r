@@ -11,15 +11,13 @@ if (Sys.getenv("RENV_PROFILE") == ''){
 renv::restore()
 library("here")
 
+CODISTEP <- 2
+
 options(scipen=999)
 
 if(CODISTEP == 2) {
   
   source(here("R", "Step2.r"))
-  
-} else if(CODISTEP == 3) {
-  
-  source(here("R", "Step3.r"))
   
 } else {
   
