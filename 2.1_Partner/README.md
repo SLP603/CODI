@@ -50,9 +50,10 @@ For RStudio Users:
 3) Update the Setup.r file.
 	 - Most settings from Step 1 will remain the same
 	 - Update the `CODISTEP` variable to *3*
-4) Open the CodeToRun.r file.  
-5) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
-6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
+4) Get the `index_site_[your partner_id]` file from the DCC (Usually distributed through PopMedNet or Egnyte) and copy it to the `From_DCC` folder
+5) Open the CodeToRun.r file.  
+6) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
+7) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
 
 For Non-RStudio Users:
 
@@ -60,6 +61,7 @@ For Non-RStudio Users:
 3) Update the Setup.r file with a basic text editor like Notepad.
 	 - Most settings from Step 1 will remain the same
 	 - Update the `CODISTEP` variable to *3*
-4) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
-5) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
-6) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
+4) Get the `index_site_[your partner_id]` file from the DCC (Usually distributed through PopMedNet or Egnyte) and copy it to the `From_DCC` folder
+5) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
+6) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
+7) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
