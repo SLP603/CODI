@@ -80,8 +80,10 @@ dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursiv
 step_3_result <- run_db_query(db_conn=conn, "SELECT * FROM #cohort_CC")
 writeOutput("step_3_result", step_3_result)
 
+message(paste0("CODI Step ", CODISTEP, " done!"))
+
 result <- tryCatch({
-  source(here("R", "MITRE", "R_2_1-step4-R"))
+  source(here("R", "MITRE", "R_2_1-step-4.R"))
   step4Output <- matched_data_id
 }, error = function(err) {
   stop(err)
@@ -91,4 +93,4 @@ result <- tryCatch({
 
 
 writeOutput("PSM_matched_data", step4Output)
-message(paste0("CODI Step ", CODISTEP, " done!"))
+message(paste0("CODI Step ", CODISTEP + 1, " done!"))
