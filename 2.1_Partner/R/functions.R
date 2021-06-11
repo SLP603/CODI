@@ -84,7 +84,8 @@ renderSqlText <- function(query_text, render=T){
                                     VITAL_SIGNS = VITAL_SIGNS,
                                     SCHEMA = SCHEMA,
                                     PERSON_ID_PATID = PERSON_ID_PATID,
-                                    BENEFIT = BENEFIT)
+                                    BENEFIT = BENEFIT,
+									PartnerID = PartnerID)
   }
   return(query_text)
 }

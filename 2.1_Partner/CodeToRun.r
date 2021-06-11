@@ -47,6 +47,10 @@ if(CODISTEP == 1) {
   
   source(here("R", "Step3.r"))
   
+} else if(CODISTEP == 6) {
+  
+  source(here("R", "Step6.r"))
+  
 } else {
   
   stop("No valid step was set.  Check you Setup.r file")
