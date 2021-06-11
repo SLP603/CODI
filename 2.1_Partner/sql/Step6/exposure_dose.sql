@@ -1,7 +1,7 @@
 --- Exposure  
 DROP TABLE IF EXISTS #EXPOSURE_DOSE;
 
-SELECT l.linkid
+SELECT l.@LINK_ID_COLUMN_VALUE as linkid
 	,program_name
 	,session_date
 	,dose
@@ -26,8 +26,8 @@ SELECT l.linkid
 INTO #EXPOSURE_DOSE
 FROM @SCHEMA.@SESSION s
 JOIN @SCHEMA.@PROGRAM pr ON pr.programid = s.programid
-JOIN @SCHEMA.@LINK l ON session.patid = l.patid
-JOIN #patientlist pl ON pl.linkid = l.linkid
+JOIN @SCHEMA.@LINK l ON s.patid = l.patid
+JOIN #patientlist pl ON pl.linkid = l.@LINK_ID_COLUMN_VALUE
 WHERE session_date >= '1/1/2017'
-ORDER BY linkid;
+ORDER BY l.@LINK_ID_COLUMN_VALUE;
 

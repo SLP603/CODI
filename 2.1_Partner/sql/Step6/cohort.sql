@@ -23,5 +23,5 @@ SELECT p.linkid, d.PERSON_ID, GENDER, PRIMARY_LANGUAGE, RACE1, hispanic,
 		END
 FROM @SCHEMA.@DEMOGRAPHICS d
 JOIN @SCHEMA.LINK l ON l.@PERSON_ID_PATID = d.PERSON_ID
-JOIN #patientlist p ON p.linkid = l.linkid
+JOIN #patientlist p ON p.linkid = l.@LINK_ID_COLUMN_VALUE
 LEFT OUTER JOIN #study_cohort s ON d.PERSON_ID = s.patid;

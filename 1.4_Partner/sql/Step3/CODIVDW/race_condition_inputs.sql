@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS #race_condition_inputs
-SELECT l.linkid
+SELECT l.@LINKID_COLUMN_VALUE as linkid
 	,category
 	,count
 	,early_admit_date

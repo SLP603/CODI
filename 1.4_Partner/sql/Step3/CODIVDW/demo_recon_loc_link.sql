@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS #demo_recon_loc_link;
 SELECT 
-	b.linkid,
+	b.@LINKID_COLUMN_VALUE,
 	--#demo_recon_loc.birth_date,
 	--#demo_recon_loc.sex,
 	--#demo_recon_loc.race,
@@ -13,5 +13,5 @@ SELECT
 INTO #demo_recon_loc_link
 FROM 
 	#demo_recon_loc b
-		LEFT JOIN @SCHEMA.@LINK l ON b.linkid = l.linkid
+		LEFT JOIN @SCHEMA.@LINK l ON b.linkid = l.@LINKID_COLUMN_VALUE
 ;
