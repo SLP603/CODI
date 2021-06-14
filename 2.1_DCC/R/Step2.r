@@ -130,11 +130,11 @@ demo_bd_sex_recon <- left_join(demo_bd_recon_final, demo_sex_recon_final, by = "
 #length(unique(demo_enc_vital_prep$linkid))
 #length(unique(demo_bd_sex_recon$linkid))
 
-# write output to csv for site to read in
-# write.csv(demo_bd_sex_recon, 
-#          file = "DCC_out/demo_bd_sex_recon.csv", 
-#          na = "NULL",
-#          row.names = FALSE)
+#write output to csv for site to read in
+write.csv(demo_bd_sex_recon, 
+         file = "output/demo_bd_sex_recon.csv", 
+         na = "NULL",
+         row.names = FALSE)
 
 # check 
 # demo_enc_vital_prep %>% select(linkid, site, inclusion, include, exclusion, exclude) %>% group_by(linkid)

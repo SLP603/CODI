@@ -10,7 +10,7 @@ stepFivePartnerFiles <- list.files(path="./partner_step_5_out", pattern="*.csv",
 
 for(partner in stepFivePartnerFiles){
   cat(paste0("loading partner file: ", partner,"\n"))
-  pattern <- "PSM_matched_data_\s*(.*?)\\s*.csv$"
+  pattern <- "PSM_matched_data_\\s*(.*?)\\s*.csv$"
   partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
   PSM_matched_data_temp <- read.csv(partner, na = "NULL")
   
