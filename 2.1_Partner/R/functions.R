@@ -50,6 +50,7 @@ run_db_query <- function(db_conn = NULL, query_text = NULL, renderSql = T, sql_l
       }
     }, error = function(err){
       cat(rendered_sql_query)
+      cat("\r\n")
       stop(err)
     }), onTimeout = 'error', timeout = 2100)
   return(sqlResult)
@@ -86,7 +87,7 @@ renderSqlText <- function(query_text, render=T){
                                     PERSON_ID_PATID = PERSON_ID_PATID,
                                     BENEFIT = BENEFIT,
 									PartnerID = PartnerID,
-									LINK_ID_COLUMN_VALUE = LINK_ID_COLUMN_VALUE)
+									LINKID_COLUMN_VALUE = LINKID_COLUMN_VALUE)
   }
   return(query_text)
 }
