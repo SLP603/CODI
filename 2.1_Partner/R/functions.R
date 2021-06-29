@@ -56,6 +56,43 @@ run_db_query <- function(db_conn = NULL, query_text = NULL, renderSql = T, sql_l
   return(sqlResult)
 }
 
+run_db_query_reader <- function(db_conn = NULL, query_text = NULL, renderSql = T, sql_location = NULL, ...) {
+  if (is.null(query_text) && is.null(sql_location)) {
+    stop("No query argument or file location was passed to function")
+  }
+  if(is.null(query_text) && !is.null(sql_location)){
+    print(paste0("Reading Sql From ", sql_location))
+    query_text = readSql(here(sql_location))
+  }
+  
+  rendered_sql_query <- renderSqlText(query_text = query_text, render = renderSql)
+  chunk_size<-2000
+  recordCount <- 1
+  df<- data.frame()
+  sqlResult <- R.utils::withTimeout(
+    tryCatch({
+      if (!is.null(db_conn)){
+        executeQuery <- dbSendQuery(db_conn, rendered_sql_query)
+        while(!DBI::dbHasCompleted((executeQuery))) {
+          chunk <- dbFetch(executeQuery, chunk_size)
+          if (nrow(chunk) > 0){
+            print(paste0("Retreving records ", recordCount, " - ", recordCount + nrow(chunk)-1))
+            df = rbind(df, chunk)
+          } else {
+            break
+          }
+          recordCount = recordCount + nrow(chunk)
+        }
+        dbClearResult(executeQuery)
+      }
+    }, error = function(err){
+      cat(rendered_sql_query)
+      cat("\r\n")
+      stop(err)
+    }), onTimeout = 'error', timeout = 4200)
+  return(df)
+}
+
 renderSqlText <- function(query_text, render=T){
   query_text <- paste("SET NOCOUNT ON;", query_text, sep="\r\n")
   if (render){

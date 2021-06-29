@@ -4,13 +4,12 @@ suppressWarnings(library("here"))
 suppressWarnings(library("SqlRender"))
 suppressWarnings(suppressPackageStartupMessages(library("dplyr")))
 
-
 snomed2icd <- read.csv(here("csv", "snomed2icd.csv"), stringsAsFactors = F) %>%
-  mutate_all(as.character)
+  mutate_all(as.character) %>%  as_tibble() 
 patientlist_location <- list.files(here("FROM_DCC"), pattern = "index_site_*" )
 patientlist <- read.csv(here("FROM_DCC",patientlist_location), stringsAsFactors = F, 
                            colClasses =c("linkid"="character", "site"="character", "index_site"="character", 
-                                         "inclusion" = "numeric", "exclusion" = "numeric"))
+                                         "inclusion" = "numeric", "exclusion" = "numeric")) %>% as_tibble()
 
 result <- tryCatch({
   
@@ -18,11 +17,10 @@ result <- tryCatch({
   tempResult1 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "snomed2icd.sql"))
   cat("Loading SNOMED to ICD codes...\n")
   dbWriteTable(conn, "#snomed2icd", snomed2icd, immediate = T, row.names=F, overwrite=T)
-  
+
   cat("Loading index_site data from DCC...\n")
   tempResult2 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "patientlist.sql"))
   dbWriteTable(conn, "#patientlist", patientlist, immediate = T, row.names=F, overwrite=T)
-  
   tempResult3 <- run_db_query(db_conn=conn, 
                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "bmiage.sql"))
   tempResult4 <- run_db_query(db_conn=conn, 
@@ -67,9 +65,6 @@ result <- tryCatch({
                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "diagnosis_CC_ind_any.sql"))
   tempResult24 <- run_db_query(db_conn=conn, 
                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_CC.sql"))
-  
-
-  
 }, error = function(err) {
   stop(err)
 }, finally = function(){
@@ -77,7 +72,7 @@ result <- tryCatch({
 })
 dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
 
-step_3_result <- run_db_query(db_conn=conn, "SELECT * FROM #cohort_CC")
+step_3_result <- run_db_query_reader(db_conn=conn, "SELECT DISTINCT * FROM #cohort_CC")
 writeOutput("step_3_result", step_3_result)
 
 message(paste0("CODI Step ", CODISTEP, " done!"))

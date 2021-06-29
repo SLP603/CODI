@@ -1,7 +1,7 @@
 --Per Ken, all the programs are in so any session record should be included to consideration in the query
 DROP TABLE IF EXISTS #study_cohort;
 
-SELECT 
+SELECT DISTINCT
 	PERSON_ID AS patid, 
 	birth_date, 
 	CASE 

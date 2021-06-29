@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS #anchor_date;
 
-SELECT a.*
+SELECT DISTINCT a.*
 	,v.ht
 	,v.wt
 	,v.ENC_ID
@@ -14,7 +14,7 @@ WHERE e.ENCTYPE = 'AV'
 
 UNION
 
-SELECT linkid
+SELECT DISTINCT linkid
 	,a.patid
 	,NULL AS first_session
 	,v.measure_date

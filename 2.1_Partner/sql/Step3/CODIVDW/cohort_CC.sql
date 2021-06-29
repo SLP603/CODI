@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS #cohort_CC
-SELECT c.linkid
+SELECT DISTINCT c.linkid
 	,c.ageyrs
 	,c.sex
 	,c.pmca
