@@ -25,6 +25,7 @@ getConnectionString <- function(){
   } 
   else {
     connectionString <- paste0(connectionString, "integratedSecurity=true")
+	Sys.setenv("PATH_TO_AUTH_DLL" = file.path(dirname(here()), "SqlServerDriver"))
   }
   
   if(nchar(extraSettings) > 0) {
@@ -39,7 +40,6 @@ getConnectionString <- function(){
 getNewDBConnection <- function(){
   if(length(dir(path = file.path(dirname(here()), "SqlServerDriver"), pattern = "*.jar")) ==0){
     DatabaseConnector::downloadJdbcDrivers("sql server", file.path(dirname(here()), "SqlServerDriver"))
-    Sys.setenv("PATH_TO_AUTH_DLL" = file.path(dirname(here()), "SqlServerDriver"))
   }
   connection_string <- getConnectionString()
   connectionDetails <- createConnectionDetails(dbms = "sql server", connectionString = connection_string, pathToDriver = file.path(dirname(here()), "SqlServerDriver"))
