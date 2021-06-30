@@ -1,8 +1,4 @@
 
-suppressWarnings(library("DBI"))
-suppressWarnings(library("here"))
-suppressWarnings(library("SqlRender"))
-suppressWarnings(suppressPackageStartupMessages(library("dplyr")))
 
 snomed2icd <- read.csv(here("csv", "snomed2icd.csv"), stringsAsFactors = F) %>%
   mutate_all(as.character) %>%  as_tibble() 
@@ -16,11 +12,12 @@ result <- tryCatch({
   conn <- getNewDBConnection()
   tempResult1 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "snomed2icd.sql"))
   cat("Loading SNOMED to ICD codes...\n")
-  dbWriteTable(conn, "#snomed2icd", snomed2icd, immediate = T, row.names=F, overwrite=T)
+  DatabaseConnector::insertTable(connection = conn, data = snomed2icd, tableName = "#snomed2icd", tempTable=T)
 
   cat("Loading index_site data from DCC...\n")
   tempResult2 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "patientlist.sql"))
-  dbWriteTable(conn, "#patientlist", patientlist, immediate = T, row.names=F, overwrite=T)
+  DatabaseConnector::insertTable(connection = conn, data = patientlist, tableName = "#patientlist", tempTable=T)
+  
   tempResult3 <- run_db_query(db_conn=conn, 
                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "bmiage.sql"))
   tempResult4 <- run_db_query(db_conn=conn, 
@@ -72,11 +69,13 @@ result <- tryCatch({
 })
 dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
 
-step_3_result <- run_db_query_reader(db_conn=conn, "SELECT DISTINCT * FROM #cohort_CC")
-writeOutput("step_3_result", step_3_result)
-
-message(paste0("CODI Step ", CODISTEP, " done!"))
-
+tryCatch({
+  step_3_result <- run_db_query_andromeda(db_conn=conn, query_text = "SELECT DISTINCT * FROM #cohort_CC", andromedaTableName = "cohort_CC")
+  writeOutput_andromeda("step_3_result", step_3_result, andromedaTableName = "cohort_CC")
+  message(paste0("CODI Step ", CODISTEP, " done!"))
+}, finally = {
+  Andromeda::close(step_3_result)
+})
 result <- tryCatch({
   source(here("R", "MITRE", "R_2_1-step-4.R"))
   step4Output <- matched_data_id

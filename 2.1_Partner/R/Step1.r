@@ -1,7 +1,4 @@
 
-suppressWarnings(library("here"))
-suppressWarnings(library("SqlRender"))
-
 result <- tryCatch({
   conn <- getNewDBConnection()
 
@@ -38,19 +35,18 @@ result <- tryCatch({
     result14 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType,"cohort.sql"))
     result15 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType,"study_cohort_demographic.sql"))
   }
-  sqlResult <- run_db_query(conn, "SELECT * FROM #study_cohort_demographic")
+  
+  sqlResult <- run_db_query_andromeda(conn, "SELECT * FROM #study_cohort_demographic", andromedaTableName = "study_cohort_demographic")
+  dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
+  writeOutput_andromeda("study_cohort_demographic", sqlResult, andromedaTableName = "study_cohort_demographic")
+  
 }, error = function(err) {
   stop(err)
 }, finally = function(){
-  tryCatch({DBI::dbDisconnect(conn)})
+  tryCatch({
+    DBI::dbDisconnect(conn)
+    Andromeda::close(sqlResult)
+    })
 })
-
-dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
-outputFile <- here("output", paste0("Step_", CODISTEP), paste0("study_cohort_demographic_", PartnerID, ".csv"))
-cat(paste0("Writing Results to outputFile:\n\t", outputFile, "\n"))
-write.csv(x = sqlResult, 
-          file = outputFile, 
-          row.names = F, 
-          quote = T, na = "NULL")
 
 message(paste0("CODI Step ", CODISTEP, " done!"))
