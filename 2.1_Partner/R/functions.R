@@ -179,5 +179,5 @@ writeOutput_andromeda <- function(fileName, data, andromedaTableName){
               append = T, 
               na = "NULL"))
   }
-  result <- batchApply(data[[andromedaTableName]], writeOutputFile, fileName, batchSize = 100)
+  result <- batchApply(data[[andromedaTableName]], writeOutputFile, fileName)
 }
