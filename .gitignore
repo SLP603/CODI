@@ -25,3 +25,4 @@
 /2.1_Partner/output/Step_1/*.csv
 /2.1_Partner/output/Step_3/*.csv
 
+*/errorReportSql.txt
