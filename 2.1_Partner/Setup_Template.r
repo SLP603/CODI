@@ -8,8 +8,11 @@ SQLServerUserName<- ""
 SQLServerPassword<- ""
 
 # The default schema for SQL Server is "dbo". If you have used a different schema, specify
-#  it here
+#  it here.  Schemata for BENEIFT and PROVIDER_SPECIALTY are also listed.  They will default
+# to the same schema as the rest of the tables but can be overridden here to another value.
 SCHEMA <- "CODI"
+BENEFIT_SCHEMA <- SCHEMA
+PROVIDER_SPECIALTY_SCHEMA <- SCHEMA
 
 # Only enter a port number if your CODI VDW SQL Server operates on a different port than
 #  the standard one of 1433 (this is rare).
@@ -58,8 +61,6 @@ SESSION <- "SESSION"
 SESSION_ALERT <- "SESSION_ALERT"
 VITAL_SIGNS <- "VITAL_SIGNS"
 BENEFIT <- "BENEFIT"
-BENEFIT_SCHEMA <- SCHEMA
-PROVIDER_SPECIALTY_SCHEMA <- SCHEMA
 
 # If DATAMODEL is set to CHORDSVDW, will set the LINK table name to LINKAGE
 #  Otherwise will use the default value of LINK.  Should be no need to update this.
