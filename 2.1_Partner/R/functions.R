@@ -125,6 +125,8 @@ renderSqlText <- function(query_text, render=T){
                                     SCHEMA = SCHEMA,
                                     PERSON_ID_PATID = PERSON_ID_PATID,
                                     BENEFIT = BENEFIT,
+									BENEFIT_SCHEMA = BENEFIT_SCHEMA,
+									PROVIDER_SPECIALTY_SCHEMA = PROVIDER_SPECIALTY_SCHEMA
 									PartnerID = PartnerID,
 									LINKID_COLUMN_VALUE = LINKID_COLUMN_VALUE)
   }

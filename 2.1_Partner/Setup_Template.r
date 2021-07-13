@@ -58,6 +58,8 @@ SESSION <- "SESSION"
 SESSION_ALERT <- "SESSION_ALERT"
 VITAL_SIGNS <- "VITAL_SIGNS"
 BENEFIT <- "BENEFIT"
+BENEFIT_SCHEMA <- SCHEMA
+PROVIDER_SPECIALTY_SCHEMA <- SCHEMA
 
 # If DATAMODEL is set to CHORDSVDW, will set the LINK table name to LINKAGE
 #  Otherwise will use the default value of LINK.  Should be no need to update this.
