@@ -32,7 +32,7 @@ CODISTEP <- 0
 #  Children's Hospital of Colorado = ch
 #  Denver Health = dh
 #  Girls on the Run = gotr
-#  hfc?
+#  Hunger Free Colorado = hfc
 #  Kaiser Permanente Colorado = kp
 PartnerID <- "dh"
 

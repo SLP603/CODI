@@ -36,7 +36,7 @@ if(!exists("CODISTEP")){
 }
 
 if(Sys.info()[["machine"]] =="x86"){
-  warning("32 bit verion of R may encounter issues.  Consider switching to 64 bit.")
+  warning("32 bit version of R may encounter issues.  Consider switching to 64 bit.")
 }
 
 if(CODISTEP == 1) {
@@ -50,6 +50,10 @@ if(CODISTEP == 1) {
 } else if(CODISTEP == 6) {
   
   source(here("R", "Step6.r"))
+  
+} else if(CODISTEP == 6.1) {
+  
+  source(here("R", "Step6.1.r"))
   
 } else {
   
