@@ -2,7 +2,7 @@
 
 snomed2icd <- read.csv(here("csv", "snomed2icd.csv"), stringsAsFactors = F) %>%
   mutate_all(as.character) %>%  as_tibble() 
-patientlist_location <- list.files(here("FROM_DCC"), pattern = "index_site_*" )
+patientlist_location <- list.files(here("FROM_DCC"), pattern = paste0("index_site_", PartnerID, ".csv" ), ignore.case = T)
 patientlist <- read.csv(here("FROM_DCC",patientlist_location), stringsAsFactors = F, 
                            colClasses =c("linkid"="character", "site"="character", "index_site"="character", 
                                          "inclusion" = "numeric", "exclusion" = "numeric")) %>% as_tibble()

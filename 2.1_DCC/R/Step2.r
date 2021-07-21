@@ -24,10 +24,10 @@ participantsData <- list()
 for(partner in stepOnePartnerFiles){
   cat(paste0("loading partner file: ", partner,"\n"))
   pattern <- "study_cohort_demographic_\\s*(.*?)\\s*.csv$"
-  partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
+  partner_id <- toupper(regmatches(partner, regexec(pattern, partner))[[1]][2])
   study_cohort_demographic_temp <- read.csv(partner, na = "NULL")
 
-  demo_enc_vital_temp <- dplyr::mutate(study_cohort_demographic_temp, site = partner_id) #%>%
+  demo_enc_vital_temp <- dplyr::mutate(study_cohort_demographic_temp, site = toupper(partner_id)) #%>%
     #select(linkid, birth_date, sex, race, hispanic, yr, encN, site, loc_start, inclusion, exclusion)
 
   assign(paste0("demo_enc_vital_", toupper(partner_id)), demo_enc_vital_temp)
