@@ -48,7 +48,21 @@ result <- tryCatch({
     result15 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType,"study_cohort_demographic.sql"))
   }
   
-  sqlResult <- run_db_query_andromeda(conn, "SELECT * FROM #study_cohort_demographic", andromedaTableName = "study_cohort_demographic")
+  sqlResult <- run_db_query_andromeda(conn, "
+  SELECT linkid
+  	,patid
+  	,cast(birth_date AS VARCHAR) birth_date
+  	,sex
+  	,race
+  	,hispanic
+  	,yr
+  	,encN
+  	,cast(loc_start AS VARCHAR) loc_start
+  	,cast(most_recent_well_child_visit AS VARCHAR) most_recent_well_child_visit
+  	,enc_count
+  	,inclusion
+  	,exclusion
+  FROM #study_cohort_demographic", andromedaTableName = "study_cohort_demographic")
   dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursive = T)
   writeOutput_andromeda("study_cohort_demographic", sqlResult, andromedaTableName = "study_cohort_demographic")
   Andromeda::close(sqlResult)

@@ -11,10 +11,10 @@
   "Packages": {
     "Andromeda": {
       "Package": "Andromeda",
-      "Version": "0.4.1",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "8dcc8e84af90526e01dcfd9c18fbb59c"
+      "Hash": "770d773d049662d2d1d13780f6f5e11c"
     },
     "BH": {
       "Package": "BH",
