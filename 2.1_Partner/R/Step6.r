@@ -1,13 +1,10 @@
 
-suppressWarnings(library("DBI"))
-suppressWarnings(library("here"))
-suppressWarnings(library("SqlRender"))
-suppressWarnings(suppressPackageStartupMessages(library("dplyr")))
-
-patientlist_location <- list.files(here("FROM_DCC"), pattern = "matched_data_*" )
+patientlist_location <- list.files(here("FROM_DCC"), pattern = paste0("matched_data_", PartnerID, ".csv" ), ignore.case = T)
+if (length(patientlist_location) == 0){
+  stop(paste0("matched_data_", PartnerID, ".csv not found in the FROM_DCC folder."))
+}
 patientlist <- read.csv(here("FROM_DCC",patientlist_location), stringsAsFactors = F, 
-                           colClasses =c("linkid"="character", "site"="character", "index_site"="character", 
-                                         "inclusion" = "numeric", "exclusion" = "numeric"))
+                           colClasses =c("linkid"="character", "in_study_cohort"="character", "index_site"="character"))
 result <- tryCatch({
   
   conn <- getNewDBConnection()
@@ -24,30 +21,31 @@ result <- tryCatch({
                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "study_cohort.sql"))
   tempResult5 <- run_db_query(db_conn=conn, 
                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort.sql"))
-  tempResult6 <- run_db_query(db_conn=conn, 
-                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "delete_from_cohort.sql"))
-  tempResult7 <- run_db_query(db_conn=conn, 
-                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_out.sql"))
   ## Only for CHORDS healthcare partners
-  if (lower(PartnerID) != "hfc" && lower(PartnerID) != 'gotr'){
+  if (tolower(PartnerID) != "hfc" && tolower(PartnerID) != 'gotr' && tolower(PartnerID) != 'dh'){
     tempResult8 <- run_db_query(db_conn=conn, 
                                 sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "anchor_study_cohort.sql"))
     tempResult9 <- run_db_query(db_conn=conn, 
                                 sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "encounters_vital_join.sql"))
     tempResult10 <- run_db_query(db_conn=conn, 
-                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "rand_enc.sql"))
+                                 sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "rand_enc.sql"))
     tempResult11 <- run_db_query(db_conn=conn, 
-                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "anchor_comparison_cohort.sql"))
+                                 sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "anchor_comparison_cohort.sql"))
     tempResult12 <- run_db_query(db_conn=conn, 
                                  sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "anchor_date.sql"))
+    tempResult6 <- run_db_query(db_conn=conn, 
+                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "delete_from_cohort.sql"))
+    tempResult7 <- run_db_query(db_conn=conn, 
+                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_out.sql"))
+
     tempResult13 <- run_db_query(db_conn=conn, 
                                  sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "outcome_vitals.sql"))
     tempResult14 <- run_db_query(db_conn=conn, 
                                  sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "lab_codes.sql"))
     tempResult15 <- run_db_query(db_conn=conn, 
                                  sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "outcome_lab_results.sql"))
-    tempResult16 <- run_db_query(db_conn=conn, 
-                                 sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "hf_participants.sql"))
+    #tempResult16 <- run_db_query(db_conn=conn, 
+    #                             sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "hf_participants.sql"))
     tempResult17 <- run_db_query(db_conn=conn, 
                                  sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "type_enc_out.sql"))
     tempResult18 <- run_db_query(db_conn=conn, 
@@ -71,7 +69,7 @@ tryCatch({
   writeOutput_andromeda("ADI_OUT", ADI_OUT, andromedaTableName = "ADI_OUT")
   writeOutput_andromeda("EXPOSURE_DOSE", EXPOSURE_DOSE, andromedaTableName = "EXPOSURE_DOSE")
   
-  if (lower(PartnerID) != "hfc" && lower(PartnerID) != 'gotr'){
+  if (tolower(PartnerID) != "hfc" && tolower(PartnerID) != 'gotr'&& tolower(PartnerID) != 'dh'){
     OUTCOME_VITALS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #OUTCOME_VITALS;", andromedaTableName = "OUTCOME_VITALS")
     OUTCOME_LAB_RESULTS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #OUTCOME_LAB_RESULTS;", andromedaTableName = "OUTCOME_LAB_RESULTS")
     #HF_PARTICIPANTS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #HF_PARTICIPANTS; -- for GOTR and HFC", andromedaTableName = "cohort_CC")

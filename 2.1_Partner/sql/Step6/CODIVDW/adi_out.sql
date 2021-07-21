@@ -14,8 +14,7 @@ SELECT
 	t.staterank_avg
 FROM #cohort c
 	LEFT JOIN @SCHEMA.@CENSUS_LOCATION cl ON c.patid = cl.PERSON_ID
-	LEFT JOIN #tract_adi t ON cl.geocode = t.census_tract
-ORDER BY linkid)
+	LEFT JOIN #tract_adi t ON cl.geocode = t.census_tract)
 
 SELECT 
 	linkid,
@@ -28,4 +27,5 @@ SELECT
 	natrank_avg,
 	staterank_avg
 INTO #ADI_OUT
-FROM CTE_ADI_OUT;
+FROM CTE_ADI_OUT
+ORDER BY linkid;

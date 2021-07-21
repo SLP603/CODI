@@ -14,7 +14,7 @@ SELECT a.linkid
 		END AS bmi
 	,diastolic
 	,systolic
-INTO OUTCOME_VITALS
+INTO #OUTCOME_VITALS
 FROM #anchor_date a
 JOIN @SCHEMA.@VITAL_SIGNS v ON v.PERSON_ID = a.patid
 JOIN @SCHEMA.@ENCOUNTERS e ON e.ENC_ID = v.ENC_ID
