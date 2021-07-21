@@ -59,7 +59,7 @@ result <- tryCatch({
 }, error = function(err) {
   stop(err)
 }, finally = function(){
-  tryCatch({DBI::dbDisconnect(conn)})
+  tryCatch({disconnect(conn)})
 })
 
 tryCatch({
