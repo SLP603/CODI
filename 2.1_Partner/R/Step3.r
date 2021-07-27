@@ -41,7 +41,7 @@ result <- tryCatch({
   tempResult13 <- run_db_query(db_conn=conn, 
                              sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_clean.sql"))
   tempResult14 <- run_db_query(db_conn=conn, 
-                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pcma_input.sql"))
+                               sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input.sql"))
   tempResult15 <- run_db_query(db_conn=conn, 
                                sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_pmca.sql"))
   tempResult16 <- run_db_query(db_conn=conn, 
