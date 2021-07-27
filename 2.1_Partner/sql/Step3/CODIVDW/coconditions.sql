@@ -4,13 +4,14 @@
 */
 DROP TABLE IF EXISTS #coconditions;
 WITH cte_comorb_codes as (
-	SELECT * 
+	SELECT distinct *
 	FROM #snomed2icd s
 	JOIN #comorb_codes c 
 		ON UPPER(RTRIM(LTRIM(c.code))) LIKE UPPER(RTRIM(LTRIM(s.mapTarget))) + '%'
+		and mapTarget != ''
 )
 
-SELECT d.DIAGNOSES_ID AS diagnosisid
+SELECT DISTINCT d.DIAGNOSES_ID AS diagnosisid
 	,d.PERSON_ID AS patid
 	,d.ADATE AS admit_date
 	,d.DX_CODETYPE AS dx_type
