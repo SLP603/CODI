@@ -24,7 +24,7 @@ JOIN (
 	FROM @SCHEMA.@SESSION s
 	JOIN #cohort c ON c.patid = s.@PERSON_ID_PATID
 	WHERE DATEPART(YEAR, session_date) = 2017
-		AND c.in_study_cohort = 1
+		AND cast(c.in_study_cohort as int) = 1
 	GROUP BY c.linkid
 		,s.@PERSON_ID_PATID
 	) first_session ON first_session.patid = e.PERSON_ID

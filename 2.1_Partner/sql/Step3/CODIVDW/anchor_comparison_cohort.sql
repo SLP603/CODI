@@ -6,4 +6,4 @@ SELECT #cohort.linkid
 INTO #anchor_comparison_cohort
 FROM #cohort
 LEFT JOIN #RAND_ENC ON #cohort.patid = #RAND_ENC.PERSON_ID
-WHERE in_study_cohort = 0;
+WHERE cast(in_study_cohort as int) = 0;
