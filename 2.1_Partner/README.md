@@ -48,7 +48,7 @@ For Non-Rstudio Users:
 
 For RStudio Users:
 
-2) Open the 1.4Partner.Rproj project file
+2) Open the 2.1_Partner.Rproj project file
 3) Copy the Setup_Template.r file and save it in the same directory as Setup.r.
 	 - Update the configurations to match your environment.  Most settings from Step 1 will remain the same. 		
 	 - Update the `CODISTEP` variable to *3*
@@ -66,4 +66,36 @@ For Non-RStudio Users:
 4) Get the `index_site_[your partner_id]` file from the DCC (Usually distributed through PopMedNet or Egnyte) and copy it to the `From_DCC` folder
 5) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
 6) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
-7) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
+7) If the program succeeds, a new set of files should appear in the output directory for the step.  Review this file and then submit the csvs back to the DCC to be processed.  If any of the CSVs have no data rows, check with the DCC before uploading.
+
+### Partner Step 6*
+
+1) If the code has been updated, obtain an updated zip from the DCC or download the code from Github as described in Step 1.
+
+For RStudio Users:
+
+2) Open the 2.1_Partner.Rproj project file
+3) Copy the Setup_Template.r file and save it in the same directory as Setup.r.
+	 - Update the configurations to match your environment.  Most settings from Step 3 will remain the same.
+	 - Update the `CODISTEP` variable to *6*
+4) Get the `matched_data_[your partner_id]` file from the DCC (Usually distributed through PopMedNet or Egnyte) and copy it to the `From_DCC` folder
+5) Open the CodeToRun.r file.  
+6) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
+
+For Non-RStudio Users:
+
+2) Open the directory where you saved the 1.4_Partner code
+3) Copy the Setup_Template.r file and save it in the same directory as Setup.r with a basic text editor like Notepad.
+	 - Update the configurations to match your environment.  Most settings from Step 3 will remain the same. 
+	 - Update the `CODISTEP` variable to *6*
+4) Get the `matched_datae_[your partner_id]` file from the DCC (Usually distributed through PopMedNet or Egnyte) and copy it to the `From_DCC` folder
+5) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
+6) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
+
+For All Users: 
+
+7) If the program succeeds, a new set of files should appear in the output directory for the step.  Review these files and then submit the csvs back to the DCC to be processed.  If any of the CSVs have no data rows, check with the DCC before uploading.
+Girls on the Run and Hunger Free Colorado will submit back 2 files (ADI_OUT.csv and EXPOSURE_DOSE.csv)
+Healthcare Site Partners will submit 5 files (ADI_OUT.csv, EXPOSURE_DOSE.csv, DIET_NUTR_ENC.csv, OUTCOME_VITALS.csv, OUTCOME_LAB_RESULTS.csv)
+
+
