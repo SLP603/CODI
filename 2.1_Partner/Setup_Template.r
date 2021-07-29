@@ -69,7 +69,7 @@ LINK <- ifelse(DATAMODEL == "CHORDSVDW", "LINKAGE", "LINK")
 
 # If CODI Tables where implemented but CHORDS conventional column names were used
 #  they can be set here. These settings are ignored for the VDW 3.5.
-PERSON_ID_PATID <- "person_id"
+PERSON_ID_PATID <- "patid"
 
 # Can be used to change remap the linkid filed name in the link table to something else.
 LINKID_COLUMN_VALUE <- "linkid"
