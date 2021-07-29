@@ -57,12 +57,11 @@ result <- tryCatch({
     writeOutput_andromeda("OUTCOME_LAB_RESULTS", OUTCOME_LAB_RESULTS, andromedaTableName = "OUTCOME_LAB_RESULTS")
     #writeOutput_andromeda("HF_PARTICIPANTS", HF_PARTICIPANTS, andromedaTableName = "cohort_CC")
   }
-  else{
-    ADI_OUT <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##ADI_OUT; -- for GOTR and HFC", andromedaTableName = "ADI_OUT")
-    EXPOSURE_DOSE <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##EXPOSURE_DOSE; -- for GOTR and HFC", andromedaTableName = "EXPOSURE_DOSE")
-    writeOutput_andromeda("ADI_OUT", ADI_OUT, andromedaTableName = "ADI_OUT")
-    writeOutput_andromeda("EXPOSURE_DOSE", EXPOSURE_DOSE, andromedaTableName = "EXPOSURE_DOSE")
-  }
+  ADI_OUT <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##ADI_OUT; -- for GOTR and HFC", andromedaTableName = "ADI_OUT")
+  EXPOSURE_DOSE <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##EXPOSURE_DOSE; -- for GOTR and HFC", andromedaTableName = "EXPOSURE_DOSE")
+  writeOutput_andromeda("ADI_OUT", ADI_OUT, andromedaTableName = "ADI_OUT")
+  writeOutput_andromeda("EXPOSURE_DOSE", EXPOSURE_DOSE, andromedaTableName = "EXPOSURE_DOSE")
+  
   
 }, error = function(err) {
   stop(err)
