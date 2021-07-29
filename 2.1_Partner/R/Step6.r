@@ -16,7 +16,7 @@ result <- tryCatch({
 
   cat("Loading index_site data from DCC...\n")
   tempResult1 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "patientlist.sql"))
-  DatabaseConnector::insertTable(connection = conn, data = patientlist, tableName = "##patientlist", tempTable=T)
+  DatabaseConnector::insertTable(connection = conn, data = patientlist, tableName = "#patientlist", tempTable=T)
   if (tolower(PartnerID) != "hfc" && tolower(PartnerID) != 'gotr'){
     tempResult2 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "delete_index_site.sql"))
   }
@@ -48,17 +48,17 @@ result <- tryCatch({
 
   ## Only for CHORDS healthcare partners
   if (tolower(PartnerID) != "hfc" && tolower(PartnerID) != 'gotr'){
-    OUTCOME_VITALS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##OUTCOME_VITALS;", andromedaTableName = "OUTCOME_VITALS")
-    OUTCOME_LAB_RESULTS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##OUTCOME_LAB_RESULTS;", andromedaTableName = "OUTCOME_LAB_RESULTS")
+    OUTCOME_VITALS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #OUTCOME_VITALS;", andromedaTableName = "OUTCOME_VITALS")
+    OUTCOME_LAB_RESULTS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #OUTCOME_LAB_RESULTS;", andromedaTableName = "OUTCOME_LAB_RESULTS")
     #HF_PARTICIPANTS <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #HF_PARTICIPANTS; -- for GOTR and HFC", andromedaTableName = "cohort_CC")
-    DIET_NUTR_ENC <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##DIET_NUTR_ENC;", andromedaTableName = "DIET_NUTR_ENC")
+    DIET_NUTR_ENC <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #DIET_NUTR_ENC;", andromedaTableName = "DIET_NUTR_ENC")
     writeOutput_andromeda("DIET_NUTR_ENC", DIET_NUTR_ENC, andromedaTableName = "DIET_NUTR_ENC")
     writeOutput_andromeda("OUTCOME_VITALS", OUTCOME_VITALS, andromedaTableName = "OUTCOME_VITALS")
     writeOutput_andromeda("OUTCOME_LAB_RESULTS", OUTCOME_LAB_RESULTS, andromedaTableName = "OUTCOME_LAB_RESULTS")
     #writeOutput_andromeda("HF_PARTICIPANTS", HF_PARTICIPANTS, andromedaTableName = "cohort_CC")
   }
-  ADI_OUT <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##ADI_OUT; -- for GOTR and HFC", andromedaTableName = "ADI_OUT")
-  EXPOSURE_DOSE <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM ##EXPOSURE_DOSE; -- for GOTR and HFC", andromedaTableName = "EXPOSURE_DOSE")
+  ADI_OUT <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #ADI_OUT; -- for GOTR and HFC", andromedaTableName = "ADI_OUT")
+  EXPOSURE_DOSE <- run_db_query_andromeda(db_conn = conn, "SELECT * FROM #EXPOSURE_DOSE; -- for GOTR and HFC", andromedaTableName = "EXPOSURE_DOSE")
   writeOutput_andromeda("ADI_OUT", ADI_OUT, andromedaTableName = "ADI_OUT")
   writeOutput_andromeda("EXPOSURE_DOSE", EXPOSURE_DOSE, andromedaTableName = "EXPOSURE_DOSE")
   
