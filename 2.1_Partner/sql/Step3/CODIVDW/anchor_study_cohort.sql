@@ -11,12 +11,21 @@ JOIN (
 		,v1.MEASURE_DATE
 		,v1.ENC_ID
 		,v1.HT
-		,v2.WT
-	FROM @SCHEMA.VITAL_SIGNS v1
-	JOIN @SCHEMA.VITAL_SIGNS v2 ON v1.enc_id = v2.enc_id
-	WHERE v1.ht IS NOT NULL
-		AND v2.wt IS NOT NULL
+		,v1.WT
+	FROM (	
+		SELECT person_id
+			,enc_id
+			,max(ht) ht
+			,max(wt) wt
+			,measure_date
+		FROM @SCHEMA.@VITAL_SIGNS
+		GROUP BY person_id
+			,enc_id
+			,measure_date
+			) v1
 	) v ON v.ENC_ID = e.ENC_ID
+	and v.ht is not null 
+	and v.wt is not null
 JOIN (
 	SELECT c.linkid
 		,s.@PERSON_ID_PATID AS patid

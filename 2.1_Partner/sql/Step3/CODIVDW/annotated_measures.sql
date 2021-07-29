@@ -24,7 +24,7 @@ JOIN #bmiage b ON d.GENDER = b.sex
 		CASE 
 			WHEN datepart(day, measure_date) >= datepart(day, BIRTH_DATE)
 				THEN datediff(month, BIRTH_DATE, measure_date)
-			ELSE datediff(month, BIRTH_DATE, dateadd(month, - 1, measure_date))
+			ELSE datediff(month, BIRTH_DATE, dateadd(month, -1, measure_date))
 			END
 		);
 
