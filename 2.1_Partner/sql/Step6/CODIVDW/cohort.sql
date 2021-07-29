@@ -14,7 +14,7 @@ CREATE TABLE #cohort (
 
 INSERT INTO #cohort
 (linkid, d.patid, sex, birth_date, race, hispanic, in_study_cohort, ageyrs)
-SELECT p.linkid, d.PERSON_ID, GENDER, PRIMARY_LANGUAGE, RACE1, hispanic, 
+SELECT p.linkid, d.PERSON_ID, GENDER, d.birth_date, RACE1, hispanic, 
 	   CASE WHEN s.patid IS NOT NULL THEN 1 ELSE 0 END,
 	   CASE 
 		WHEN DATEDIFF(day, DATEADD(year, DATEDIFF(YEAR, d.birth_date, '1/1/2017'), d.birth_date), '1/1/2017') < 0

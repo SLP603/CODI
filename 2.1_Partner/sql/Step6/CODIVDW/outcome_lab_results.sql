@@ -15,7 +15,7 @@ SELECT a.linkid
 	,MODIFIER_HIGH
 	,abn_ind
 INTO #OUTCOME_LAB_RESULTS
-FROM @SCHEMA.@LAB_RESULTS l
+FROM @LAB_RESULTS_SCHEMA.@LAB_RESULTS l
 JOIN #anchor_date a ON a.patid = l.PERSON_ID
 JOIN #patientlist p ON p.linkid = a.linkid
 WHERE RESULT_DT >= DATEADD(month, - 8, a.measure_date)

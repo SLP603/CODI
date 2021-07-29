@@ -127,6 +127,7 @@ renderSqlText <- function(query_text, render=T){
                                     BENEFIT = BENEFIT,
 									BENEFIT_SCHEMA = BENEFIT_SCHEMA,
 									PROVIDER_SPECIALTY_SCHEMA = PROVIDER_SPECIALTY_SCHEMA,
+									LAB_RESULTS_SCHEMA = LAB_RESULTS_SCHEMA,
 									PartnerID = PartnerID,
 									LINKID_COLUMN_VALUE = LINKID_COLUMN_VALUE)
   }
@@ -170,16 +171,26 @@ writeOutput_andromeda <- function(fileName, data, andromedaTableName){
     file.remove(outputFile)
   }
   cat(paste0("Writing Results to outputFile:\n\t", outputFile, "\n"))
-  writeOutputFile <- function(batch, fileName) {
-    colnames(batch) <- tolower(colnames(batch))
-    suppressWarnings(write.table(x = batch, 
+  outputData <- data.frame(data[[andromedaTableName]])
+  colnames(outputData) <- tolower(colnames(outputData))
+  write.table(x = outputData, 
               file = outputFile, 
               row.names = F,
               sep=",",
               quote = T,
               col.names = !file.exists(outputFile),
               append = T, 
-              na = "NULL"))
-  }
-  result <- batchApply(data[[andromedaTableName]], writeOutputFile, fileName)
+              na = "NULL")
+  #writeOutputFile <- function(batch, fileName) {
+  #  colnames(batch) <- tolower(colnames(batch))
+  #  write.table(x = batch, 
+  #            file = outputFile, 
+  #            row.names = F,
+  #            sep=",",
+  #            quote = T,
+  #            col.names = !file.exists(outputFile),
+  #            append = T, 
+  #            na = "NULL")
+  #}
+  #result <- batchApply(data[[andromedaTableName]], writeOutputFile, fileName)
 }
