@@ -25,21 +25,22 @@ JOIN (
 		,diastolic
 		,systolic
 	FROM (
-		SELECT person_id
-			,enc_id
-			,measure_date
-			,max(ht) ht
-			,max(wt) wt
-			,max(diastolic) diastolic
-			,max(systolic) systolic
-		FROM @SCHEMA.@VITAL_SIGNS
-		GROUP BY person_id
-			,enc_id
-			,measure_date
+		SELECT v2.person_id
+			,v2.enc_id
+			,v2.measure_date
+			,max(v2.ht) ht
+			,max(v2.wt) wt
+			,max(v2.diastolic) diastolic
+			,max(v2.systolic) systolic
+		FROM @SCHEMA.@VITAL_SIGNS v2
+		JOIN #anchor_date ad on ad.patid = v2.person_id
+		GROUP BY v2.person_id
+			,v2.enc_id
+			,v2.measure_date
 		) v1
 	) v ON v.PERSON_ID = a.patid
 JOIN @SCHEMA.@ENCOUNTERS e ON e.ENC_ID = v.ENC_ID
 JOIN #patientlist p ON p.linkid = a.linkid
-WHERE v.measure_date >= DATEADD(month, - 8, a.measure_date)
+WHERE v.measure_date >= DATEADD(month, -8, a.measure_date)
 ORDER BY a.linkid;
 
