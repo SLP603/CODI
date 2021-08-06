@@ -48,5 +48,6 @@ for(returnPartner in participants){
 
   write.csv(matched_data_temp, file = paste0("./output/matched_data_", returnPartner, ".csv"), na = "", row.names = F)
 }
+write.csv(matched_data, file = "./output/matched_data.csv", na = "", row.names = F)
 
 message("Done running CODI Step 5")
