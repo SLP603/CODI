@@ -8,8 +8,12 @@ SQLServerUserName<- ""
 SQLServerPassword<- ""
 
 # The default schema for SQL Server is "dbo". If you have used a different schema, specify
-#  it here
+#  it here.  Schemata for BENEIFT and PROVIDER_SPECIALTY are also listed.  They will default
+# to the same schema as the rest of the tables but can be overridden here to another value.
 SCHEMA <- "CODI"
+BENEFIT_SCHEMA <- SCHEMA
+PROVIDER_SPECIALTY_SCHEMA <- SCHEMA
+LAB_RESULTS_SCHEMA <- SCHEMA
 
 # Only enter a port number if your CODI VDW SQL Server operates on a different port than
 #  the standard one of 1433 (this is rare).
@@ -22,14 +26,14 @@ extraSettings <- ""
 #  the 3.5 version of the CHORDS VDW, change this value to CHORDSVDW
 DATAMODEL <- "CODIVDW"
 
-# Set the step as 1 or 3
+# Set the step
 CODISTEP <- 0
 
 # PatenerID corresponds to the initials of your site and is one of the following:
 #  Children's Hospital of Colorado = ch
 #  Denver Health = dh
 #  Girls on the Run = gotr
-#  hfc?
+#  Hunger Free Colorado = hfc
 #  Kaiser Permanente Colorado = kp
 PartnerID <- ""
 

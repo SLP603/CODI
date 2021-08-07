@@ -1,16 +1,26 @@
+/*CHORDS Change: 
+	Changed d.dx = s.referencedComponentId to d.dx = s.mapTarget
+	because referencedComponentId are all snomed codes and diagnoses.dx are (mostly) ICD codes.
+*/
+
 DROP TABLE IF EXISTS #coconditions;
-SELECT d.DIAGNOSES_ID
-	,-- we cannot fill
-	d.PERSON_ID AS patid
-	,d.ADATE
-	,d.DX_CODETYPE
+WITH cte_comorb_codes as (
+	SELECT distinct *
+	FROM #snomed2icd s
+	JOIN #comorb_codes c 
+		ON UPPER(RTRIM(LTRIM(c.code))) LIKE UPPER(RTRIM(LTRIM(s.mapTarget))) + '%'
+		and mapTarget != ''
+)
+
+SELECT DISTINCT d.DIAGNOSES_ID AS diagnosisid
+	,d.PERSON_ID AS patid
+	,d.ADATE AS admit_date
+	,d.DX_CODETYPE AS dx_type
 	,d.dx
-	,sm.mapTarget
+	,s.mapTarget
 	,code
 	,condition
-	,DATEPART(YEAR, ADATE) AS year
 INTO #coconditions
 FROM @SCHEMA.@DIAGNOSES d
-JOIN #snomed2icd sm ON d.dx = sm.referencedComponentId
-JOIN #comorb_codes cm ON UPPER(RTRIM(LTRIM(cm.code))) LIKE '%' + UPPER(RTRIM(LTRIM(sm.mapTarget))) + '%'
+JOIN cte_comorb_codes s ON d.dx = s.mapTarget
 WHERE ADATE >= '12/31/2016';

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS #demo_recon_loc_link;
 SELECT 
-	b.@LINKID_COLUMN_VALUE,
+	b.linkid,
 	--#demo_recon_loc.birth_date,
 	--#demo_recon_loc.sex,
 	--#demo_recon_loc.race,

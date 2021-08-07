@@ -79,3 +79,4 @@ FROM (
 	) conditions
 ORDER BY patid;
 
+

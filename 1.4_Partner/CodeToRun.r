@@ -1,3 +1,5 @@
+##usecase 1.4
+
 if (Sys.getenv("RENV_PROFILE") == ''){
   rMjrVersion <- version[['major']]
   cat(paste0("R version ",rMjrVersion, " detected\n"))
