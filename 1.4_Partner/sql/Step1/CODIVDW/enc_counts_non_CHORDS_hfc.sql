@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS #enc_counts;
+SELECT * 
+INTO
+  #enc_counts
+FROM (
+  SELECT linkid
+    ,patid COLLATE SQL_Latin1_General_CP1_CS_AS as patid
+	,yr
+	,null AS encN
+  FROM (
+  	SELECT l.@LINKID_COLUMN_VALUE AS linkid, e.PERSON_ID as patid , e.ENC_ID,
+  		CASE WHEN SESSION_DATE >= '2017-1-1' AND SESSION_DATE < '2018-1-1' THEN 2017
+  			 WHEN  SESSION_DATE >= '2018-1-1' AND SESSION_DATE < '2019-1-1' THEN 2018
+  			 WHEN  SESSION_DATE >= '2019-1-1' AND SESSION_DATE < '2020-1-1' THEN 2019
+  		END AS yr
+  	FROM @SCHEMA.@SESSION e
+  	JOIN @SCHEMA.@LINK l on l.@PERSON_ID_PATID = e.PERSON_ID COLLATE SQL_Latin1_General_CP1_CS_AS
+  	WHERE e.SESSION_DATE >= '2017-1-1' AND e.SESSION_DATE < '2020-1-1'
+  ) AS encounter_plus_year
+  GROUP BY linkid, patid, yr
+) a;
