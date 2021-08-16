@@ -2,15 +2,18 @@ DROP TABLE IF EXISTS #insurance;
 SELECT e.ENC_ID
 	,e.PERSON_ID
 	,BEN.BENEFIT_CAT
-	,(
-		SELECT CASE 
-				WHEN BENEFIT_CAT IN ('CC', 'CP', 'MC', 'MD')
-					THEN 'Public (non-military)'
-				WHEN BENEFIT_CAT IN ('CO')
-					THEN 'Private'
-				ELSE 'Other or unknown' -- OG, NC, OT, UN, WC, NI
-				END
-		) AS insurance_type
+	,CASE 
+		WHEN BENEFIT_CAT IN (
+				'CC'
+				,'CP'
+				,'MC'
+				,'MD'
+				)
+			THEN 'Public (non-military)'
+		WHEN BENEFIT_CAT IN ('CO')
+			THEN 'Private'
+		ELSE 'Other or unknown' -- OG, NC, OT, UN, WC, NI
+		END AS insurance_type
 INTO #insurance
 FROM @SCHEMA.@ENCOUNTERS e
 LEFT JOIN (
@@ -28,4 +31,3 @@ JOIN (
 	GROUP BY e.PERSON_ID
 	) ei ON ei.PERSON_ID = e.PERSON_ID
 	AND ei.admin_date = e.ADATE
-

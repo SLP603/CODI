@@ -12,7 +12,7 @@ WITH cte_comorb_codes as (
 		and mapTarget != ''
 )
 
-SELECT DISTINCT d.DIAGNOSES_ID AS diagnosisid
+SELECT DISTINCT d.DIAGNOSES_ID
 	,d.PERSON_ID AS patid
 	,d.ADATE AS admit_date
 	,d.DX_CODETYPE AS dx_type
@@ -20,6 +20,7 @@ SELECT DISTINCT d.DIAGNOSES_ID AS diagnosisid
 	,s.mapTarget
 	,code
 	,condition
+	,DATEPART(YEAR, ADATE) AS year
 INTO #coconditions
 FROM @SCHEMA.@DIAGNOSES d
 JOIN cte_comorb_codes s ON d.dx = s.mapTarget
