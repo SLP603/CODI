@@ -1,7 +1,7 @@
 ### Partner Step 1
 
 For RStudio Users:
-1) Download the project from GITHUB or obtain a zip from the DCC 
+1) Download the project from Github.
 2) Unzip the project to a directory where you have read and write access
 3) If you have RStudio Installed, open the directory and navigate to the CODI/1.4_Partner/1.4_Partner.Rproj file and double click on it.
 4) RStudio should automatically detect if renv is needed but it can be installed manually with the command ```
@@ -10,7 +10,6 @@ install.packages("renv")```
 6) Edit the Setup.r file in the following ways and save the file:
 	+ Set credentials you need to connect to your CODI VDW.  Check with your database administrator at your site if you are not sure what these are.
 	+ If your site has implemented a different database schema than `dbo`, update the SCHEMA variable.
-	+ If you are running the code against a 3.5 CHORDS VDW instead of a CODI VDW, update the DATAMODEL variable from CODIVDW to CHORDSVDW
 	+ Set the `CODISTEP` variable to `1`
 	+ Set `PartnerID` for your site
 	+ If your table names are different than the standard table names (e.g.: `CHORDS_DEMOGRAPHICS` instead of `DEMOGRAPHICS`) you can adjust the table names section to match your site's configuration
@@ -27,7 +26,6 @@ For Non-Rstudio Users:
 5) Edit the Setup.r file in the following ways and save the file:
 	+ Set credentials you need to connect to your CODI VDW.  Check with your database administrator at your site if you are not sure what these are.
 	+ If your site has implemented a different database schema than `dbo`, update the SCHEMA variable.
-	+ If you are running the code against a 3.5 CHORDS VDW instead of a CODI VDW, update the DATAMODEL variable from CODIVDW to CHORDSVDW
 	+ Set the `CODISTEP` variable to `1`
 	+ Set `PartnerID` for your site
 	+ If your table names are different than the standard table names (e.g.: `CHORDS_DEMOGRAPHICS` instead of `DEMOGRAPHICS`) you can adjust the table names section to match your site's configuration
