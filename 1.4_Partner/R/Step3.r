@@ -14,25 +14,30 @@ result <- tryCatch({
   tempResult2 <- run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "demo_recon_loc.sql"))
   DatabaseConnector::insertTable(connection = conn, data = demo_recon_loc, tableName = "#demo_recon_loc", tempTable=T)
 
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "enc_test.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "comorb_codes.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_con_codes.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "demo_recon_loc_link.sql"))
+  
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "enc_counts.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "enc_test.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "ec_test_latest_loc_date.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_age.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_age_filter.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "demo_recon_loc_link.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "geocode_tract.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "demo_recon_loc_tract.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract_prep.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "comorb_codes.sql"))
-  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_con_codes.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "insurance.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_insurance_prep.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract_prep.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "coconditions.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "diagnosis_CC_ind_any.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract.sql"))
+  run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract.sql"))
+
+
+
+
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract_comorb.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "distinct_cohort.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input.sql"))
