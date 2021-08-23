@@ -14,6 +14,8 @@ SCHEMA <- "CODI"
 BENEFIT_SCHEMA <- SCHEMA
 PROVIDER_SPECIALTY_SCHEMA <- SCHEMA
 LAB_RESULTS_SCHEMA <- SCHEMA
+CENSUS_DEMOG_SCHEMA <- SCHEMA
+
 
 # Only enter a port number if your CODI VDW SQL Server operates on a different port than
 #  the standard one of 1433 (this is rare).
