@@ -34,10 +34,6 @@ result <- tryCatch({
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "diagnosis_CC_ind_any.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_demographic_tract.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract.sql"))
-
-
-
-
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "cohort_tract_comorb.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "distinct_cohort.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "pmca_input.sql"))
@@ -51,10 +47,10 @@ result <- tryCatch({
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_condition_inputs_1.sql"))
   run_db_query(db_conn=conn, sql_location=here("sql", paste0("Step", CODISTEP), sqlType, "race_condition_inputs.sql"))
   
-  cohort_tract_comorb <- run_db_query_andromeda(db_conn=conn, "SELECT * FROM #cohort_tract_comorb ORDER BY linkid;", andromedaTableName ="cohort_tract_comorb" )
-  pmca_output <- run_db_query_andromeda(db_conn=conn, "SELECT * FROM #pmca_output ORDER BY pmca;", andromedaTableName = "pmca_output")
-  measures_output <- run_db_query_andromeda(db_conn=conn, "SELECT * FROM #measures_output;", andromedaTableName = "measures_output")
-  race_condition_inputs <- run_db_query_andromeda(db_conn=conn, "SELECT * FROM #race_condition_inputs;", andromedaTableName = "race_condition_inputs")
+  cohort_tract_comorb <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #cohort_tract_comorb ORDER BY linkid;", andromedaTableName ="cohort_tract_comorb" )
+  pmca_output <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #pmca_output ORDER BY pmca;", andromedaTableName = "pmca_output")
+  measures_output <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #measures_output;", andromedaTableName = "measures_output")
+  race_condition_inputs <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #race_condition_inputs;", andromedaTableName = "race_condition_inputs")
   
 }, error = function(err) {
   stop(err)
