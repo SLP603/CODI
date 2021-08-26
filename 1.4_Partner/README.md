@@ -41,20 +41,20 @@ For Non-Rstudio Users:
 
 For RStudio Users:
 1) Obtain the most up to date code from Github
-2) Download the demo_recon_loc_[your partner_id].csv file from the DCC (Usually distributed through PopMedNet Datamart Client or Egnyte) and copy it to the `From_DCC` folder.
-3) Open the 1.4Partner.Rproj project file
+2) Download the demo_recon_loc_[your partner_id].csv file from the DCC (Usually distributed through PopMedNet Datamart Client or Egnyte) and copy it to the `1.4_Partner\From_DCC` folder.
+3) Navigate up to the `1.4_Partner` directory and open the `1.4Partner.Rproj` project file
 4) Copy the Setup.r file from when you ran Step 1 to the new code directory.  Check the `Setup_Template.r` file if there are any new settings you should copy over and configure.
 5) Update the `CODISTEP` variable in the Setup.r file to `3`
 6) Open the CodeToRun.r file.  
-7) At the top of the CodeToRun.r file, click the *Source* button to start the run.  If there are any errors, those should be displayed in the console.
-8) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
+7) At the top of the CodeToRun.r file, click the `Source` button to start the run.  If there are any errors, those should be displayed in the console.
+8) If the program succeeds, a new set of 4 files should appear in the `1.4_Partner\output\Step_3 output directory` for the step.  Review these file and then submit the csv back to the DCC through the PMN Datamart Clinet to be processed.
   
 For Non-RStudio Users:
 1) Obtain the most up to date code from Github
-2) Download the demo_recon_loc_[your partner_id].csv file from the DCC (Usually distributed through PopMedNet Datamart Client or Egnyte) and copy it to the `From_DCC` folder.
-3) Open the directory where you saved the updated 1.4_Partner code
+2) Download the demo_recon_loc_[your partner_id].csv file from the DCC (Usually distributed through PopMedNet Datamart Client or Egnyte) and copy it to the `1.4_Partner\From_DCC` folder.
+3) Navigate up to the `1.4_Partner` directory
 4) Copy the `Setup.r` file from when you ran Step 1 to the new code directory.  Check the `Setup_Template.r` file if there are any new settings you should copy over and configure.
 5) Update the `CODISTEP` variable in the Setup.r file to `3` using notepad or other text editor.  Don't use Microsoft Word.
 6) Open the R_Location.txt file with a basic text editor to verify the location of R has not changed.
 7) Double click on the CodeToRun.cmd file.  This will bring in the location of R and attempt to run the program.  If an error is encountered, it should display in the console.
-8) If the program succeeds, a new file should appear in the output directory for the step.  Review this file and then submit the csv back to the DCC to be processed.
+8) If the program succeeds, a new set of 4 files should appear in the `1.4_Partner\output\Step_3` output directory for the step.  Review these file and then submit the csv back to the DCC through the PMN Datamart Clinet to be processed.
