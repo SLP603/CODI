@@ -31,7 +31,7 @@ for(partner in stepOnePartnerFiles){
   study_cohort_demographic_temp <- read_csv(partner, na = "NULL")
 
   demo_enc_vital_temp <- dplyr::mutate(study_cohort_demographic_temp, site = partner_id) %>%
-    select(linkid, birth_date, sex, race, hispanic, yr, encN, site, loc_start)
+    select(linkid, birth_date, sex, race, hispanic, yr, encn, site, loc_start)
 
   assign(paste0("demo_enc_vital_", toupper(partner_id)), demo_enc_vital_temp)
   participantsData[[partner_id]] <- demo_enc_vital_temp
@@ -55,12 +55,12 @@ demo_enc_vital_prep$race[demo_enc_vital_prep$race == "NULL"] <- NA
 
 demo_enc_vital_prep$yr <- as.numeric(demo_enc_vital_prep$yr)
 demo_enc_vital_prep$loc_start <- as.Date(demo_enc_vital_prep$loc_start)
-demo_enc_vital_prep$encN <- as.numeric(demo_enc_vital_prep$encN)
+demo_enc_vital_prep$encn <- as.numeric(demo_enc_vital_prep$encn)
 
 
 demo_enc_vital_prep_link <- demo_enc_vital_prep %>%
   group_by(linkid, site) %>%
-  dplyr::mutate(sum_encn = sum(encN))
+  dplyr::mutate(sum_encn = sum(encn))
 
 #preserve demo variables plus linkids, patikds
 demo_link <- demo_enc_vital_prep_link %>% select(linkid, site, birth_date, sex, race, hispanic, sum_encn) %>% arrange(linkid)
