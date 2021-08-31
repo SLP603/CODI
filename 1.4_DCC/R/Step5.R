@@ -2,6 +2,8 @@
 library(tidyr)
 library(readr)
 library(eeptools)
+library(Andromeda)
+library(tools)
 
 #for growthcleanr
 library(devtools)
@@ -10,6 +12,7 @@ library(foreach)
 library(doParallel)
 library(Hmisc)
 library(bit64)
+
 
 # install growthcleanr
 # remotes::install_github("carriedaymont/growthcleanr", INSTALL_opts=c("--no-multiarch"))
@@ -36,10 +39,10 @@ demo_recon$sex[demo_recon$sex == "M"] <- 0
 cohort_tract_comorb_data <- list()
 pmca_output_data <- list()
 race_condition_inputs_data <- list()
-measures_demo_long <- list()
-
+measures_demo_long_data <- list()
+cat("loading input files...\n")
 cohort_tract_comorb_PartnerFiles <- list.files(path="./partner_step_4_out", pattern="cohort_tract_comorb_*", full.names=TRUE, recursive=FALSE, ignore.case = T)
-
+cat("loading cohort_tract_comorb\n")
 for(partner in cohort_tract_comorb_PartnerFiles){
         cat(paste0("loading partner file: ", partner,"\n"))
         pattern <- "cohort_tract_comorb_\\s*(.*?)\\s*.csv$"
@@ -53,7 +56,7 @@ cohort_tract_comorb %>% unique() %>% group_by(linkid) %>% arrange(linkid)
 
 
 pmca_output_PartnerFiles <- list.files(path="./partner_step_4_out", pattern="pmca_output_*", full.names=TRUE, recursive=FALSE, ignore.case = T)
-
+cat("loading pmca_output\n")
 for(partner in pmca_output_PartnerFiles){
         cat(paste0("loading partner file: ", partner,"\n"))
         pattern <- "pmca_output_\\s*(.*?)\\s*.csv$"
@@ -66,8 +69,8 @@ pmca_output <- bind_rows(pmca_output_data)
 
 
 race_condition_inputs_PartnerFiles <- list.files(path="./partner_step_4_out", pattern="race_condition_inputs_*", full.names=TRUE, recursive=FALSE, ignore.case = T)
-
-for(partner in pmca_output_PartnerFiles){
+cat("race_condition_inputs\n")
+for(partner in race_condition_inputs_PartnerFiles){
         cat(paste0("loading partner file: ", partner,"\n"))
         pattern <- "race_condition_inputs_\\s*(.*?)\\s*.csv$"
         partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
@@ -89,13 +92,22 @@ race_condition_inputs <- race_condition_inputs %>% dplyr::mutate(category_form =
         ))
 
 
-measures_output_PartnerFiles <- list.files(path="./partner_step_4_out", pattern="measures_output_*", full.names=TRUE, recursive=FALSE, ignore.case = T)
-
+measures_output_PartnerFiles <- list.files(path="./partner_step_4_out", pattern="measures_output*", full.names=TRUE, recursive=FALSE, ignore.case = T)
+cat("loading measures_output\n")
 for(partner in measures_output_PartnerFiles){
         cat(paste0("loading partner file: ", partner,"\n"))
-        pattern <- "measures_output_\\s*(.*?)\\s*.csv$"
-        partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
-        measures_output_temp <- readr::read_csv(partner, na = "NULL")
+        if (tolower(tools::file_ext(partner)) == "csv"){
+                pattern <- "measures_output_\\s*(.*?)\\s*.csv$"
+                partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
+                measures_output_temp <- readr::read_csv(partner, na = "NULL")
+        }
+        if (tolower(tools::file_ext(partner)) == "zip"){
+                pattern <- "measures_output_\\s*(.*?)\\s*.zip$"
+                partner_id <- tolower(regmatches(partner, regexec(pattern, partner))[[1]][2])
+                measures_output_temp <- Andromeda::loadAndromeda(partner)
+                measures_output_temp <- tibble::as_tibble(rename_with(measures_output_temp$measures_output, tolower))
+                measures_output_temp$measure_date <- as.Date(measures_output_temp$measure_date)
+        }
         measures_demo_temp <- left_join(measures_output_temp, demo_recon, by = "linkid")
 
         measures_demo_temp$agedays <- as.numeric(difftime(measures_demo_temp$measure_date,
@@ -116,10 +128,12 @@ measures_demo_long <- bind_rows(measures_demo_long_data)
 
 
 ## pull bmiagerev
+cat("## pull bmiagerev\n")
 bmiagerev <- read_csv("csv/bmiagerev.csv") %>% dplyr::rename(agemos = Agemos, sex = Sex)
 
 
 # test unique only
+cat("# test unique only\n")
 measures_demo_long <- measures_demo_long %>% unique()
 
 measures_demo_long <- as.data.table(measures_demo_long)
@@ -127,12 +141,13 @@ setkey(measures_demo_long, linkid, param, agedays)
 
 
 # clean measurements
+cat("# clean measurements\n")
 cleaned_measures_demo_long <- measures_demo_long[, clean_value:=
                                                          cleangrowth(linkid, param, agedays, sex, measurement,
-                                                                     parallel = T, )]
+                                                                     parallel = T, num.batches = 6, quietly = F)]
 
 # keep those marked include only
-
+cat("# keep those marked include only\n")
 measures_demo_long_kept <- cleaned_measures_demo_long[clean_value=='Include']
 
 
@@ -150,16 +165,18 @@ write_csv(measures_demo_long_kept, path = "output/measures_demo_long_kept.csv")
 #pmca_output$pmca <- ifelse()
 
 # count unique body systems and filter by uniques
+cat("# count unique body systems and filter by uniques\n")
 pmca_recon <- pmca_output %>%
         group_by(linkid) %>%
         dplyr::mutate(count_bs = dplyr::n_distinct(body_system_name, na.rm = TRUE)) %>%
         unique()
 
-pmca_recon %>% View()
+#pmca_recon %>% View()
 
 # pmca_recon %>% arrange(linkid) %>% ifelse(pmca == 1,)
 
 # add max pmca
+cat("# add max pmca\n")
 pmca_recon_count <- pmca_recon %>%
         group_by(linkid) %>%
         dplyr::arrange(linkid) %>%
@@ -180,14 +197,16 @@ write_csv(pmca_recon_count_max, path = "output/pmca_recon_count_max.csv")
 
 
 #### weight category for random BMI ####
-
+cat("#### weight category for random BMI ####\n")
 # spread to wide format again by date
 measures_demo_wide_kept <- measures_demo_long_kept %>% spread(param, measurement)
 
 # filter by measure dates that occur in 2017, 2018, 2019
+cat("# filter by measure dates that occur in 2017, 2018, 2019\n")
 measures_demo_wide_kept_CY <- measures_demo_wide_kept %>% filter(measure_date >= "2017-01-01" & measure_date < "2020-01-01")
 
 # pull yr var based on measure_date
+cat("# pull yr var based on measure_date\n")
 measures_demo_wide_kept_CY <- measures_demo_wide_kept_CY %>%
         dplyr::mutate(yr = year(measure_date))
 
@@ -196,24 +215,29 @@ measures_demo_wide_kept_CY <- measures_demo_wide_kept_CY %>%
         dplyr::mutate(bmi = WEIGHTKG/(HEIGHTCM * 0.01))
 
 # select 1 random row per linkid, per yr
+cat("# select 1 random row per linkid, per yr\n")
 set.seed(1492)
 measures_demo_wide_rand <- measures_demo_wide_kept_CY %>%
         group_by(linkid, yr) %>%
         sample_n(1)
 
 # add age in months
+cat("# add age in months\n")
 measures_demo_wide_rand$agemos <- floor(age_calc(measures_demo_wide_rand$birth_date, enddate = measures_demo_wide_rand$measure_date,
                                            units = "months", precise = TRUE))
 measures_demo_wide_rand$sex <- measures_demo_wide_rand$sex %>% as.numeric()
 
 # join with bmiagerev
+cat("# join with bmiagerev\n")
 measures_demo_wide_rand_z <- left_join(measures_demo_wide_rand, bmiagerev, by = c("agemos", "sex"))
 
 # calculate z
+cat("# calculate z\n")
 measures_demo_wide_rand_z <- measures_demo_wide_rand_z %>%
         dplyr::mutate(z = ((bmi/M)^L - 1)/(L*S))
 
 # convert to percentiles
+cat("# convert to percentiles\n")
 measures_demo_wide_rand_z_perc <- measures_demo_wide_rand_z %>%
         dplyr::mutate(bmi_percentile = case_when(
                 z < -1.881 ~ 3, # Underweight
@@ -230,6 +254,7 @@ measures_demo_wide_rand_z_perc <- measures_demo_wide_rand_z %>%
 )
 
 # convert to bmi categories
+cat("# convert to bmi categories\n")
 measures_demo_wide_rand_z_perc_cat <- measures_demo_wide_rand_z_perc %>%
         dplyr::mutate(wt_category = case_when(
                 is.na(bmi_percentile) ~ 'Missing',
@@ -255,11 +280,12 @@ measures_demo_wide_rand_z_perc_cat
 
 
 # outputs in terms of counts by yr/wt/(var) groupings
-
+cat("# outputs in terms of counts by yr/wt/(var) groupings\n")
 demo_recon %>% group_by(linkid)
 pmca_recon_count_max %>% group_by(linkid)
 
 # age
+cat("# age\n")
 measures_demo_wide_rand_z_perc_cat$age <- floor(age_calc(measures_demo_wide_rand_z_perc_cat$birth_date,
                                                          enddate = measures_demo_wide_rand_z_perc_cat$measure_date,
                                                          units = "years", precise = TRUE))
@@ -271,6 +297,7 @@ age_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 age_group_counts
 
 # sex
+cat("# sex\n")
 sex_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         select(linkid, yr, sex, wt_category) %>%
         group_by(yr, sex, wt_category) %>%
@@ -278,6 +305,7 @@ sex_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 sex_group_counts
 
 # race
+cat("# race\n")
 race_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         select(linkid, yr, race, wt_category) %>%
         group_by(yr, race, wt_category) %>%
@@ -285,6 +313,7 @@ race_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 race_group_counts
 
 # ethnicity
+cat("# ethnicity\n")
 ethn_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         select(linkid, yr, hispanic, wt_category) %>%
         group_by(yr, hispanic, wt_category) %>%
@@ -293,6 +322,7 @@ ethn_group_counts
 
 
 # insurance
+cat("# insurance\n")
 insurance_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         select(linkid, yr, insurance_type, wt_category) %>%
         group_by(yr, insurance_type, wt_category) %>%
@@ -300,6 +330,7 @@ insurance_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 insurance_group_counts
 
 # tract
+cat("# tract\n")
 tract_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, TRACT, wt_category) %>%
@@ -308,6 +339,7 @@ tract_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 tract_group_counts
 
 # PMCA
+cat("# PMCA\n")
 pmca_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(pmca_recon_count_max, by = "linkid") %>%
         select(linkid, yr, pmca_max, wt_category) %>%
@@ -316,8 +348,9 @@ pmca_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 pmca_group_counts
 
 ## co occurring conditions ##
-
+cat("## co occurring conditions ##\n")
 # Acanthosis_Nigricans
+cat("# Acanthosis_Nigricans\n")
 acanthosis_nigricans_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, acanthosis_nigricans, wt_category) %>%
@@ -332,6 +365,7 @@ acanthosis_nigricans_group_counts
 #           by =  c("linkid", "yr")) %>% View()
 
 # adhd
+cat("# adhd\n")
 adhd_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, adhd, wt_category) %>%
@@ -341,6 +375,7 @@ adhd_group_counts %>% View()
 
 
 # anxiety
+cat("# anxiety\n")
 anxiety_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, anxiety, wt_category) %>%
@@ -350,6 +385,7 @@ anxiety_group_counts
 
 
 # asthma
+cat("# asthma\n")
 asthma_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, asthma, wt_category) %>%
@@ -358,6 +394,7 @@ asthma_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 asthma_group_counts
 
 # autism
+cat("# autism\n")
 autism_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, autism, wt_category) %>%
@@ -367,6 +404,7 @@ autism_group_counts
 
 
 # depression
+cat("# depression\n")
 depression_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, depression, wt_category) %>%
@@ -375,6 +413,7 @@ depression_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 depression_group_counts
 
 # diabetes
+cat("# diabetes\n")
 diabetes_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, diabetes, wt_category) %>%
@@ -384,6 +423,7 @@ diabetes_group_counts
 
 
 # eating_disorders
+cat("# eating_disorders\n")
 eating_disorders_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, eating_disorders, wt_category) %>%
@@ -393,6 +433,7 @@ eating_disorders_group_counts
 
 
 # hyperlipidemia
+cat("# hyperlipidemia\n")
 hyperlipidemia_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, hyperlipidemia, wt_category) %>%
@@ -401,6 +442,7 @@ hyperlipidemia_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 hyperlipidemia_group_counts
 
 # hypertension
+cat("# hypertension\n")
 hypertension_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, hypertension, wt_category) %>%
@@ -409,6 +451,7 @@ hypertension_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 hypertension_group_counts
 
 # NAFLD
+cat("# NAFLD\n")
 NAFLD_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, NAFLD, wt_category) %>%
@@ -417,6 +460,7 @@ NAFLD_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
 NAFLD_group_counts
 
 # Obstructive_sleep_apnea
+cat("# Obstructive_sleep_apnea\n")
 Obstructive_sleep_apnea_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, Obstructive_sleep_apnea, wt_category) %>%
@@ -426,6 +470,7 @@ Obstructive_sleep_apnea_group_counts
 
 
 # PCOS
+cat("# PCOS\n")
 PCOS_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         select(linkid, yr, PCOS, wt_category) %>%
@@ -435,6 +480,7 @@ PCOS_group_counts
 
 
 # write outputs
+cat("# write outputs\n")
 write_csv(age_group_counts, path = "output/age_group_counts.csv")
 write_csv(sex_group_counts, path = "output/sex_group_counts.csv")
 write_csv(race_group_counts, path = "output/race_group_counts.csv")
@@ -461,13 +507,14 @@ write_csv(PCOS_group_counts, path = "output/PCOS_group_counts.csv")
 
 
 #### NORC input style ####
-
+cat("#### NORC input style ####\n")
 
 measures_demo_wide_rand_z_perc_cat %>% View()
 
 cohort_tract_comorb %>% View()
 
 # grab all required inputs to start
+cat("# grab all required inputs to start\n")
 NORC_input_prep <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
         left_join(race_condition_inputs, by = "linkid") %>%
@@ -495,9 +542,11 @@ NORC_input_prep <- measures_demo_wide_rand_z_perc_cat %>%
 NORC_input_prep <- NORC_input_prep %>% group_by(linkid) %>% distinct()
 
 # concatenate STATE to COUNTY to generate COUNTY_FIPS
+cat("# concatenate STATE to COUNTY to generate COUNTY_FIPS\n")
 NORC_input_prep$COUNTY_FIPS <- paste0(NORC_input_prep$STATE, NORC_input_prep$COUNTY)
 
 # pull demo set of columns for prep, and rename
+cat("# pull demo set of columns for prep, and rename\n")
 NORC_input_prep_demo <- NORC_input_prep %>% select(linkid,
                                                    DOB = birth_date,
                                                    SEX = sex,
@@ -512,9 +561,11 @@ NORC_input_prep_demo <- NORC_input_prep %>% select(linkid,
 )
 
 # filter by distinct
+cat("# filter by distinct\n")
 NORC_input_prep_demo <- NORC_input_prep_demo %>% group_by(linkid) %>% distinct()
 
 # pull BMI  set of columns for prep, and rename
+cat("# pull BMI  set of columns for prep, and rename\n")
 NORC_input_prep_bmi_prep <- NORC_input_prep %>% select(linkid,
                                                        yr,
                                                        WEIGHT = WEIGHTKG,
@@ -526,6 +577,7 @@ NORC_input_prep_bmi_prep <- NORC_input_prep %>% select(linkid,
 )
 
 # convert from long to wide to tag on CY for each column
+cat("# convert from long to wide to tag on CY for each column\n")
 NORC_input_prep_bmi <- pivot_wider(NORC_input_prep_bmi_prep,
                                    id_cols = linkid,
                                    names_from = yr,
@@ -536,10 +588,11 @@ NORC_input_prep_bmi <- pivot_wider(NORC_input_prep_bmi_prep,
                                                    WTCAT,
                                                    AGEYR))
 
-NORC_input_prep_bmi %>% View()
+#NORC_input_prep_bmi %>% View()
 
 
 # merge the results
+cat("# merge the results\n")
 NORC_input_prep_merged <- left_join(NORC_input_prep_demo, NORC_input_prep_bmi, by = "linkid")
 
 # handle race_conditions inputs
@@ -637,7 +690,7 @@ if(length(race_condition_inputs$linkid) != 0){
 
 
 
-# leaving a "merged" version for now, there will be duplicate rows due to the way yrs and location vars work right now
+cat("# leaving a 'merged' version for now, there will be duplicate rows due to the way yrs and location vars work right now\n")
 NORC_input_final %>% View()
 
 NORC_input_final <- NORC_input_final %>% select(linkid,
@@ -681,5 +734,6 @@ NORC_input_final <- NORC_input_final %>% select(linkid,
                                                    SCZCNT,
                                                    SCZDATE)
 
+cat("writing NORC_input_final\n")
 write_csv(NORC_input_final, path = "output/NORC_input_final.csv")
-
+message("CODI Step 5 Done")

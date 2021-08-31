@@ -224,7 +224,7 @@ demo_recon_loc %>% filter(is.na(yr)) %>% arrange(linkid)# %>% View()
 
 dir.create(file.path("./output"), showWarnings = FALSE)
 
-cat("Creating partner outputs for Step 3")
+cat("Creating partner outputs for Step 3\n")
 for(returnPartner in participants){
   demo_recon_loc_temp <- demo_recon_loc %>% filter(site == returnPartner) %>% select(linkid, site, yr)
   write.csv(demo_recon_loc_temp, file = paste0("./output/demo_recon_loc_", returnPartner, ".csv"), na = "", row.names = F)
