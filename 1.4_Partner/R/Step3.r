@@ -49,8 +49,8 @@ result <- tryCatch({
   
   cohort_tract_comorb <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #cohort_tract_comorb ORDER BY linkid;", andromedaTableName ="cohort_tract_comorb" )
   pmca_output <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #pmca_output ORDER BY pmca;", andromedaTableName = "pmca_output")
-  measures_output <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #measures_output;", andromedaTableName = "measures_output")
-  race_condition_inputs <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT * FROM #race_condition_inputs;", andromedaTableName = "race_condition_inputs")
+  measures_output <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT linkid, ht, wt, cast(measure_date as varchar) measure_date, insurance_type FROM #measures_output;", andromedaTableName = "measures_output")
+  race_condition_inputs <- run_db_query_andromeda(db_conn=conn, "SELECT DISTINCT linkid, category, count, cast(early_admit_date as varchar) early_admit_date FROM #race_condition_inputs;", andromedaTableName = "race_condition_inputs")
   
 }, error = function(err) {
   stop(err)
@@ -63,7 +63,9 @@ dir.create(here("output", paste0("Step_", CODISTEP)), showWarnings = F, recursiv
 tryCatch({
   writeOutput_andromeda("cohort_tract_comorb", cohort_tract_comorb, andromedaTableName = "cohort_tract_comorb")
   writeOutput_andromeda("pmca_output", pmca_output, andromedaTableName = "pmca_output")
-  writeOutput_andromeda("measures_output", measures_output, andromedaTableName = "measures_output")
+  #writeOutput_andromeda("measures_output", measures_output, andromedaTableName = "measures_output")
+  cat("Saving measures_output to ", paste0("./output/Step_3/measures_output_", PartnerID, ".zip"), "\n")
+  Andromeda::saveAndromeda(andromeda = measures_output, fileName = paste0("./output/Step_3/measures_output_", PartnerID, ".zip"), maintainConnection = T)
   writeOutput_andromeda("race_condition_inputs", race_condition_inputs, andromedaTableName = "race_condition_inputs")
 })
 
