@@ -79,7 +79,7 @@ for(partner in race_condition_inputs_PartnerFiles){
 }
 
 race_condition_inputs <- bind_rows(race_condition_inputs_data)
-race_condition_inputs$linkid <- as.numeric(race_condition_inputs$linkid)
+race_condition_inputs$linkid <- as.character(race_condition_inputs$linkid)
 race_condition_inputs <- race_condition_inputs %>% dplyr::rename(CNT = count, DATE = early_admit_date)
 race_condition_inputs <- race_condition_inputs %>% dplyr::mutate(category_form = dplyr::case_when(
         category == "Asthma" ~ "ASTHMA",
@@ -141,7 +141,7 @@ setkey(measures_demo_long, linkid, param, agedays)
 
 
 # clean measurements
-cat("# clean measurements\n")
+cat("# clean measurements(takes a long time to run(3+ hrs))\n")
 cleaned_measures_demo_long <- measures_demo_long[, clean_value:=
                                                          cleangrowth(linkid, param, agedays, sex, measurement,
                                                                      parallel = T, num.batches = 6, quietly = F)]
@@ -333,8 +333,8 @@ insurance_group_counts
 cat("# tract\n")
 tract_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
-        select(linkid, yr, TRACT, wt_category) %>%
-        group_by(yr, TRACT, wt_category) %>%
+        select(linkid, yr, tract, wt_category) %>%
+        group_by(yr, tract, wt_category) %>%
         dplyr::summarise(count = n())
 tract_group_counts
 
@@ -371,7 +371,7 @@ adhd_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         select(linkid, yr, adhd, wt_category) %>%
         group_by(yr, adhd, wt_category) %>%
         dplyr::summarise(count = n())
-adhd_group_counts %>% View()
+#adhd_group_counts %>% View()
 
 
 # anxiety
@@ -454,8 +454,8 @@ hypertension_group_counts
 cat("# NAFLD\n")
 NAFLD_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
-        select(linkid, yr, NAFLD, wt_category) %>%
-        group_by(yr, NAFLD, wt_category) %>%
+        select(linkid, yr, nafld, wt_category) %>%
+        group_by(yr, nafld, wt_category) %>%
         dplyr::summarise(count = n())
 NAFLD_group_counts
 
@@ -463,8 +463,8 @@ NAFLD_group_counts
 cat("# Obstructive_sleep_apnea\n")
 Obstructive_sleep_apnea_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
-        select(linkid, yr, Obstructive_sleep_apnea, wt_category) %>%
-        group_by(yr, Obstructive_sleep_apnea, wt_category) %>%
+        select(linkid, yr, obstructive_sleep_apnea, wt_category) %>%
+        group_by(yr, obstructive_sleep_apnea, wt_category) %>%
         dplyr::summarise(count = n())
 Obstructive_sleep_apnea_group_counts
 
@@ -473,8 +473,8 @@ Obstructive_sleep_apnea_group_counts
 cat("# PCOS\n")
 PCOS_group_counts <- measures_demo_wide_rand_z_perc_cat %>%
         left_join(cohort_tract_comorb, by = c("linkid", "yr")) %>%
-        select(linkid, yr, PCOS, wt_category) %>%
-        group_by(yr, PCOS, wt_category) %>%
+        select(linkid, yr, pcos, wt_category) %>%
+        group_by(yr, pcos, wt_category) %>%
         dplyr::summarise(count = n())
 PCOS_group_counts
 
@@ -509,9 +509,9 @@ write_csv(PCOS_group_counts, path = "output/PCOS_group_counts.csv")
 #### NORC input style ####
 cat("#### NORC input style ####\n")
 
-measures_demo_wide_rand_z_perc_cat %>% View()
+#measures_demo_wide_rand_z_perc_cat %>% View()
 
-cohort_tract_comorb %>% View()
+#cohort_tract_comorb %>% View()
 
 # grab all required inputs to start
 cat("# grab all required inputs to start\n")
@@ -525,10 +525,10 @@ NORC_input_prep <- measures_demo_wide_rand_z_perc_cat %>%
                hispanic,
                latitude,
                longitude,
-               STATE,
-               ZIP,
-               TRACT,
-               COUNTY,
+               state,
+               zip,
+               tract,
+               county,
                yr,
                WEIGHTKG,
                HEIGHTCM,
@@ -554,11 +554,10 @@ NORC_input_prep_demo <- NORC_input_prep %>% select(linkid,
                                                    ETHNICITY = hispanic,
                                                    LAT = latitude,
                                                    LNG = longitude,
-                                                   STATE_FIPS = STATE,
-                                                   ZIP,
-                                                   CENSUS_TRACT = TRACT,
-                                                   COUNTY_FIPS
-)
+                                                   STATE_FIPS = state,
+                                                   zip,
+                                                   CENSUS_TRACT = tract,
+                                                   COUNTY_FIPS = county)
 
 # filter by distinct
 cat("# filter by distinct\n")
@@ -572,9 +571,7 @@ NORC_input_prep_bmi_prep <- NORC_input_prep %>% select(linkid,
                                                        HEIGHT = HEIGHTCM,
                                                        BMI = bmi,
                                                        WTCAT = wt_category,
-                                                       AGEYR = age,
-
-)
+                                                       AGEYR = age)
 
 # convert from long to wide to tag on CY for each column
 cat("# convert from long to wide to tag on CY for each column\n")
@@ -691,7 +688,7 @@ if(length(race_condition_inputs$linkid) != 0){
 
 
 cat("# leaving a 'merged' version for now, there will be duplicate rows due to the way yrs and location vars work right now\n")
-NORC_input_final %>% View()
+#NORC_input_final %>% View()
 
 NORC_input_final <- NORC_input_final %>% select(linkid,
                                                    DOB,
@@ -701,7 +698,7 @@ NORC_input_final <- NORC_input_final %>% select(linkid,
                                                    LAT,
                                                    LNG,
                                                    STATE_FIPS,
-                                                   ZIP	,
+                                                   zip	,
                                                    CENSUS_TRACT,
                                                    COUNTY_FIPS,
                                                    WEIGHT2017,
